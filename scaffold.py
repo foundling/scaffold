@@ -1,50 +1,53 @@
 import sys
 import os
+import re
 
-scaffold_file, output_path = sys.argv[1:3]
 
 def err(msg):
     print msg
     sys.exit(1)
 
-def determine_indendation():
-    pass
 
-def validate(text):
-    ''' 
-        Go through each line and get leading spaces count. If at any point
-        the present indentation does not match the previous ones, Raise Exception.
+def get_indent(lines):
+    '''
+        Get the indentation level of the file. Default is 0. 
     '''
 
-    return text
+    indent_found = False 
+    indent = 0
 
+    for line in lines:
+        leading_spaces = len(line) - len(line.lstrip())
+        if leading_spaces and not indent_found:
+            indent_found = True
+            indent = leading_spaces
+            break
 
-def parse():
-    pass
+    return indent
 
+def validate(lines, indent):
+    '''
+        Take a list of lines and compare their indent against the indent arg.
+        Comparison is only made if leading_spaces is not 0.
+    '''
+
+    for line in lines:
+        leading_spaces = len(line) - len(line.lstrip())
+        if leading_spaces and leading_spaces != indent:
+            raise ValueError('Indentation does not match inital indent of\
+                              {} spaces'.format(indent))
+
+    print ''.join(lines)
+    return True
 
 def main():
 
-    try:
-        f = open(scaffold_file)
-        text = f.read()
+    f, output_path = sys.argv[1:3]
+    lines = open(f).readlines()
+    output_dir = os.mkdir(output_path)
 
-    except IOError:
-        msg = 'Error: Cannot open file {}.'.format(scaffold_file)
-        if not os.path.exists(scaffold_file):
-            msg += ' The file doesn\'t exist.'
-            
-        err(msg)
-
-    try:
-        # use os.path correctly to get the full path
-        output_dir = os.mkdir(output_path)
-
-    except OSError:
-        msg = 'The directory exists. I wont overwrite it.' 
-
-
-    validate(text)
+    indent_count = get_indent(lines)
+    is_valid = validate(lines, indent_count)
 
 if __name__ == '__main__':
     main()
