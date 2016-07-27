@@ -3,11 +3,6 @@ import os
 import re
 
 
-def err(msg):
-    print msg
-    sys.exit(1)
-
-
 def get_indent(lines):
     '''
         Get the indentation level of the file. Default is 0. 
@@ -25,7 +20,7 @@ def get_indent(lines):
 
     return indent
 
-def validate(lines, indent):
+def validate_schema(lines, indent):
     '''
         Take a list of lines and compare their indent against the indent arg.
         Comparison is only made if leading_spaces is not 0.
@@ -33,12 +28,20 @@ def validate(lines, indent):
 
     for line in lines:
         leading_spaces = len(line) - len(line.lstrip())
+        print leading_spaces
         if leading_spaces and leading_spaces != indent:
             raise ValueError('Indentation does not match inital indent of\
                               {} spaces'.format(indent))
 
     print ''.join(lines)
     return True
+
+def err(msg):
+    ''' 
+        print out an error message and exit with status 1. 
+    '''
+    print msg
+    sys.exit(1)
 
 def main():
 
@@ -47,7 +50,7 @@ def main():
     output_dir = os.mkdir(output_path)
 
     indent_count = get_indent(lines)
-    is_valid = validate(lines, indent_count)
+    is_valid = validate_schema(lines, indent_count)
 
 if __name__ == '__main__':
     main()

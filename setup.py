@@ -1,14 +1,14 @@
 from setuptools import setup
 
 setup(
-    name = "scaffold",
+    name = "scaffolder",
     version = "1.0",
-    py_modules = ['scaffold'],
+    py_modules = ['scaffolder'],
     install_requires = [
-        'scaffold'
+        'scaffolder'
     ],
     entry_points = '''
         [console_scripts]
-        scaffold=scaffold:main
+        scaffolder=scaffolder:main
     '''
 )

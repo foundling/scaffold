@@ -1,0 +1,6 @@
+/dir_a
+/dir_b
+    1.js
+    1.js
+/dir_c
+   2.js
