@@ -1,5 +1,0 @@
-/dir_1
-    1.js
-    2.js
-    README.md
-/dir_2
