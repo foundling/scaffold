@@ -4,3 +4,4 @@ __pycache__
 *.sw[op]
 .*
 !/.gitignore
+scaffolder.egg-info
