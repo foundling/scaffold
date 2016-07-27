@@ -1,5 +1,51 @@
-/dir1
+dir1/
     f1.txt
-/dir2
-    f2.txt
-    f2.js
+    dir3/
+        f2.txt
+        f2.js
+        dir4/
+            f4.txt
+            f5.txt
+        dir7/
+dir2/
+    a.txt
+
+**say the root is specified on command line, and will be created and will contain everything in this file
+
+validate file and get minimal indent value (probably 0, but could be larger)
+if not valid, throw error
+otherwise, take min indent and consider it your baseline root indentation value
+start reading lines
+
+    if they end in /, make a new node with current node the parent
+        node: {name: 'dirname', children: [] }
+        children can be nodes or strings
+
+    if the indentation increases
+        make values in new node 
+
+relative increase in indent is signal of a child
+    if that child ends in a slash (dir), NEW NODE
+    otherwise LEAF (file)
+
+traversal mechanism:
+if dir:
+    create new node
+     
+
+schema: 
+{
+    name: 'dir1',
+    children: [
+        'f1.txt',
+        {
+            name: 'dir3', 
+            parent: '',
+            children: [
+                'f2.txt',
+                'f2.js'
+            ]  
+        }
+    ]
+
+}

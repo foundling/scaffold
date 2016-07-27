@@ -1,5 +1,10 @@
-/dir_1
+root/
     1.js
     2.js
     README.md
-/dir_2
+    dir_3/
+        3.txt
+        4.md
+    dir4/
+        5.txt
+        6.txt
