@@ -1,7 +1,4 @@
-''' 
-    Scaffolder.py
-    Use a flat-file with consistent indentation to create a directory tree 
-'''
+''' Generates a directory tree from a reasonable, consistently indented flat-file representation. '''
 
 from scaffolder import new_node
 
@@ -19,19 +16,24 @@ def get_indent(line):
     return len(line) - len(line.lstrip())
 
 def find_ancestor(parent_count):
-    ''' 
-        Use relative dedent level to determine parent.
+    ''' Use relative dedent level to determine parent.
         1 dedent -> append new node to parent's parent's child node  
         N is a unit of dedent, then we travel up N + 1 parents and append a new node to its children
     '''
-
     pass
 
-indent_level = 0 
-indent_value = 4
+def validate_schema(schema):
+    ''' Takes in a list of lines and returns indentation level and value if valid, throws if invalid. '''
+
+    indent_level = 0 
+    indent_size = 4
+
+    return indent_level, indent_size
+
 schema = [  chomp(line) 
             for line in open('test.txt').readlines() 
             if line.strip() ]
+indent_level, indent_size = validate_schema(schema)
 root = new_node(None, 'root')
 current_node = root
 
