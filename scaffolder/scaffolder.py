@@ -91,7 +91,9 @@ for line in schema:
         else:
             # otherwise, append its filename to parent's children
             file_name = get_filename(line)
-            node['children'].append(file_name)
+            parent['children'].append(file_name)
+
+        current_node = new_dir_node
 
     ''' We are creating a new node at the level of the parent or higher in the tree '''
     if indent < last_indent:
@@ -129,6 +131,3 @@ for line in schema:
 
     # update last_indent 
     last_indent = indent
-
-    # update current_node
-    current_node = 
