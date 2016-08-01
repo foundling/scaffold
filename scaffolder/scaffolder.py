@@ -1,4 +1,12 @@
-''' Generates a directory tree from a reasonable, consistently indented flat-file representation. '''
+''' 
+    Generates a directory tree from a reasonable, consistently indented flat-file representation. 
+
+    Rules:
+        - Indentation must be consistent 
+        - First Line must contain no indentation
+        - Comments must start with '#'
+
+'''
 
 from scaffolder import new_node
 
@@ -12,8 +20,21 @@ def new_node(parent, dir_name):
 def chomp(line): 
     return line[:-1]
 
+def is_empty(line):
+    return line.strip()
+
+def is_comment(line):
+    return line.lstrip().startswith('#')
+
 def get_indent(line):
     return len(line) - len(line.lstrip())
+
+def get_filename(line):
+    return line.strip()
+
+def get_dirname(line):
+    return line.rstrip('/')
+
 
 def find_ancestor(parent_count):
     ''' Use relative dedent level to determine parent.
@@ -30,22 +51,26 @@ def validate_schema(schema):
 
     return indent_level, indent_size
 
+# remove newlines and filter out empty lines
 schema = [  chomp(line) 
             for line in open('test.txt').readlines() 
-            if line.strip() ]
+            if not is_empty(line) or not is_comment(line) ]
+
 indent_level, indent_size = validate_schema(schema)
 root = new_node(None, 'root')
+
 current_node = root
+last_indent = indent_level
 
 for line in schema:
     indent = get_indent(line)
-    is_dir = line.rstrip().endswith('/')
+    filename = get_filename(line) 
+    is_dir = filename.rstrip().endswith('/')
 
     if indent > last_indent:
-        ''' We are creating a new node lower in the tree ''' 
-        ''' Must be a directory that triggers this '''
+        ''' We are creating a new node lower in the tree. '''
 
-        ''' get last child in current node's children '''
+        # get last child in current node's children 
         node = current_node.children[-1]
 
     if indent < last_indent:
@@ -54,6 +79,14 @@ for line in schema:
 
     else:
         print ''' adding children to current node '''
+        if is_dir:
+            parent = current_node['parent']
+            dirname = get_dirname(line)
+            new_dir_node = new_node(parent, dirname)
+            current_node['children'].append(new_dir_node)
+        else:
+            filename = get_filename(line)
+            current_node['children'].append(filename) 
 
     ''' update last_indent ''' 
     last_indent = indent
