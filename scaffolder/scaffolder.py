@@ -1,21 +1,17 @@
 ''' 
-    Generates a directory tree from a reasonable, consistently indented flat-file representation. 
+    Generates a directory tree from a reasonable, consistently-indented flat file representation. 
 
     Rules:
-        - Indentation must be consistent 
-        - First Line must contain no indentation
-        - Comments must start with '#'
+        - Indentation must be consistent throughout 
+        - Directories must end with a '/'
+        - Everything else is a file
+        - If a command-line argument for the root directory is not given, the schema must contain a single top-level directory
+        - Blank lines and comments (lines starting with '#' after being stripped of whitespace) are stripped
+        - Indentation must be preceded by a directory
 
 '''
 
 from scaffolder import new_node
-
-def new_node(parent, dir_name):
-    return  {
-        'parent':   parent,
-        'dir_name': name, 
-        'children': []
-    }
 
 def chomp(line): 
     return line[:-1]
@@ -29,8 +25,11 @@ def is_comment(line):
 def is_dir(line):
     return line.rstrip().endswith('/')
 
-def get_indent(line):
+def get_raw_indent(line):
     return len(line) - len(line.lstrip())
+
+def get_indent_units(raw_indent_value, indent_size):
+    return raw_indent_value / indent_size
 
 def get_filename(line):
     return line.strip()
@@ -38,13 +37,25 @@ def get_filename(line):
 def get_dirname(line):
     return line.rstrip('/')
 
+def new_node(parent, dir_name):
+    return  {
+        'parent':   parent,
+        'dir_name': name, 
+        'children': []
+    }
 
-def find_ancestor(parent_count):
+def find_ancestor(start_node, parents_to_visit):
     ''' Use relative dedent level to determine parent.
         1 dedent -> append new node to parent's parent's child node  
         N is a unit of dedent, then we travel up N + 1 parents and append a new node to its children
     '''
-    pass
+    current_node = start_node
+
+    while (parents_to_visit > 0):
+        current_node = current_node['parent']
+        parents_to_visit -= 1
+
+    return current_node
 
 def validate_schema(schema):
     ''' Takes in a list of lines and returns indentation level and value if valid, throws if invalid. '''
@@ -59,18 +70,19 @@ schema = [  chomp(line)
             for line in open('test.txt').readlines() 
             if not is_empty(line) or not is_comment(line) ]
 
-indent_level, indent_size = validate_schema(schema)
-root = new_node(None, 'root')
+raw_indent_value, indent_size = validate_schema(schema)
+indent_units = get_indent_units(raw_indent_value, indent_size))
 
+root = new_node(None, 'root')
 current_node = root
 last_indent = indent_level
 
 for line in schema:
-    indent = get_indent(line)
+    indent = get_raw_indent(line)
     filename = get_filename(line) 
 
+    ''' We are creating a directory, which means a new child node of the most recent directory. '''
     if indent > last_indent:
-        ''' We are creating a directory, which means a new child node of the most recent directory. '''
 
         # get node created in current node's children, becomes parent of new dir  
         parent = current_node['children'][-1]
@@ -85,21 +97,15 @@ for line in schema:
             file_name = get_filename(line)
             node['children'].append(file_name)
 
+    ''' We are creating a new node higher up or at the same level in the tree '''
     if indent < last_indent:
-        ''' We are creating a new node higher up or at the same level in the tree '''
 
-        # how many units of indent is it less than current? call that N
+        # how many 'units' of indent is it less than current? call that N
         # traverse N + 1 parents 
 
         n = (last_indent - indent) / indent_size
-        num_parents = n + 1
-        target_parent = current_node
-
-        while (num_parents > 0):
-            target_parent = target_parent['parent']
-            num_parents -= 1
-
-
+        parents_to_visit = n + 1
+        target_parent = find_ancestor(current_node, parents_to_visit)
 
         if is_dir(line):
             parent = target_parent
@@ -109,6 +115,7 @@ for line in schema:
             filename = get_filename(line)
             target_parent['children'].append(filename)
 
+    ''' We are just adding more dirs or files to the current node's children '''
     else:
         print ''' adding children to current node '''
         if is_dir:
