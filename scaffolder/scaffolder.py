@@ -1,94 +1,50 @@
-import sys
-import os
-import re
+''' 
+    Scaffolder.py
+    Use a flat-file with consistent indentation to create a directory tree 
+'''
 
-# tree structure
-#{ 
-#    name: 'dir1', 
-#    parent: {},
-#    children: [ 
-#        'f1.txt', 
-#        { 
-#            name: 'dir3',  
-#            parent: '', 
-#            children: [ 
-#                'f2.txt', 
-#                'f2.js' 
-#            ]   
-#        } 
-#    ] 
-# 
-#}
+from scaffolder import new_node
 
-def get_indent(lines):
-    '''
-        Get the indentation level of the file. Default is 0. 
-    '''
-
-    indent_found = False 
-    indent = 0
-
-    for line in lines:
-        leading_spaces = len(line) - len(line.lstrip())
-        if leading_spaces and not indent_found:
-            indent_found = True
-            indent = leading_spaces
-            break
-
-    return indent
-
-def validate_schema(lines, indent):
-    '''
-        Take a list of lines and compare their indent against the indent arg.
-        Comparison is only made if leading_spaces is not 0.
-    '''
-
-    for line in lines:
-        leading_spaces = len(line) - len(line.lstrip())
-        if leading_spaces and leading_spaces != indent:
-            raise ValueError('Indentation does not match inital indent of\
-                              {} spaces'.format(indent))
-
-    print ''.join(lines)
-    return True
-
-def new_node(name, parent):
-    return {
-
-        'name':     name,
+def new_node(parent, dir_name):
+    return  {
         'parent':   parent,
+        'dir_name': name, 
         'children': []
-
     }
 
-def build_tree(root, lines):
-    if root is None:
-        root = find_root(lines)
+def chomp(line): 
+    return line[:-1]
 
-    data[root] = new_node(root, None)
+def get_indent(line):
+    return len(line) - len(line.lstrip())
 
-def err(msg):
-    ''' 
-        print out an error message and exit with status 1. 
-    '''
-    print msg
-    sys.exit(1)
+def find_parent():
+    pass
 
-def main():
+last_indent = 0 
+schema = [  chomp(line) 
+            for line in open('test.txt').readlines() 
+            if line.strip() ]
+root = new_node(None, 'root')
+current_node = root
 
-    f =  sys.argv[1]
-    root = None
-    if len(sys.argv) > 2:
-        root = sys.argv[2]
+for line in schema:
+    indent = get_indent(line)
+    is_dir = line.rstrip().endswith('/')
 
-    lines = open(f).readlines()
-    #output_dir = os.mkdir(output_path)
+    if indent > last_indent:
+        ''' We are creating a new node lower in the tree ''' 
+        ''' Must be a directory that triggers this '''
 
-    indent_count = get_indent(lines)
-    is_valid = validate_schema(lines, indent_count)
+        ''' get last child in current node's children '''
+        node = current_node.children[-1]
 
-    file_tree = build_tree(root, lines)
-    print file_tree
+    if indent < last_indent:
+        ''' We are creating a new node higher up or at the same level in the tree '''
+        print 'parent or sibling'
 
-if __name__ == '__main__':
-    main()
+    else:
+        print ''' adding children to current node '''
+
+    ''' update last_indent ''' 
+    last_indent = indent
