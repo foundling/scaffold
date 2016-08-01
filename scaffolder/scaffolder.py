@@ -18,10 +18,17 @@ def chomp(line):
 def get_indent(line):
     return len(line) - len(line.lstrip())
 
-def find_parent():
+def find_ancestor(parent_count):
+    ''' 
+        Use relative dedent level to determine parent.
+        1 dedent -> append new node to parent's parent's child node  
+        N is a unit of dedent, then we travel up N + 1 parents and append a new node to its children
+    '''
+
     pass
 
-last_indent = 0 
+indent_level = 0 
+indent_value = 4
 schema = [  chomp(line) 
             for line in open('test.txt').readlines() 
             if line.strip() ]
