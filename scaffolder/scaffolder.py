@@ -2,16 +2,14 @@
     Generates a directory tree from a reasonable, consistently-indented flat file representation. 
 
     Rules:
-        - Indentation must be consistent throughout 
-        - Directories must end with a '/'
-        - Everything else is a file
-        - If a command-line argument for the root directory is not given, the schema must contain a single top-level directory
-        - Blank lines and comments (lines starting with '#' after being stripped of whitespace) are stripped
-        - Indentation must be preceded by a directory
+        - The indentation level must be consistent throughout the schema file. 
+        - Lines that end with a '/' are directories. Everything else is a file. 
+        - If a command-line argument for the root directory is not given, the schema must contain a single top-level directory.
+        - If a command-line argument for the root directory is given, multiple top-level directories are allowed.
+        - Blank lines (lines of length 0 after being stripped of whitespace) and comments (lines starting with '#' after being stripped of whitespace) are ignored.
+        - Indentation must be preceded by a directory.
 
 '''
-
-from scaffolder import new_node
 
 def chomp(line): 
     return line[:-1]
