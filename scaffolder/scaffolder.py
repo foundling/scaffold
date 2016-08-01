@@ -25,11 +25,8 @@ def is_comment(line):
 def is_dir(line):
     return line.rstrip().endswith('/')
 
-def get_raw_indent(line):
+def get_indent(line):
     return len(line) - len(line.lstrip())
-
-def get_indent_units(raw_indent_value, indent_size):
-    return raw_indent_value / indent_size
 
 def get_filename(line):
     return line.strip()
@@ -58,33 +55,32 @@ def find_ancestor(start_node, parents_to_visit):
     return current_node
 
 def validate_schema(schema):
-    ''' Takes in a list of lines and returns indentation level and value if valid, throws if invalid. '''
+    ''' Takes in a list of lines and returns indentation size if valid, throws if invalid. '''
 
-    indent_level = 0 
     indent_size = 4
 
-    return indent_level, indent_size
+    return indent_size
 
 # remove newlines and filter out empty lines
 schema = [  chomp(line) 
             for line in open('test.txt').readlines() 
             if not is_empty(line) or not is_comment(line) ]
 
-raw_indent_value, indent_size = validate_schema(schema)
-indent_units = get_indent_units(raw_indent_value, indent_size))
+indent_size = validate_schema(schema)
+indent_level = 0
 
 root = new_node(None, 'root')
 current_node = root
 last_indent = indent_level
 
 for line in schema:
-    indent = get_raw_indent(line)
+    indent = get_indent(line)
     filename = get_filename(line) 
 
     ''' We are creating a directory, which means a new child node of the most recent directory. '''
     if indent > last_indent:
 
-        # get node created in current node's children, becomes parent of new dir  
+        # get last node created in current node's children, becomes parent of new dir node  
         parent = current_node['children'][-1]
 
         # if this line represents a directory, create a new node, append to parent's children
@@ -97,10 +93,10 @@ for line in schema:
             file_name = get_filename(line)
             node['children'].append(file_name)
 
-    ''' We are creating a new node higher up or at the same level in the tree '''
+    ''' We are creating a new node at the level of the parent or higher in the tree '''
     if indent < last_indent:
 
-        # how many 'units' of indent is it less than current? call that N
+        # how many 'units' of indent is it less than current? call that n
         # traverse N + 1 parents 
 
         n = (last_indent - indent) / indent_size
@@ -114,6 +110,10 @@ for line in schema:
         else:
             filename = get_filename(line)
             target_parent['children'].append(filename)
+
+        # now set the current node to be target parent
+        current_node = target_parent
+
 
     ''' We are just adding more dirs or files to the current node's children '''
     else:
