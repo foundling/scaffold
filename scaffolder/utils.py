@@ -22,6 +22,9 @@ def get_dirname(line):
 def new_node(parent, dirname):
     return  dict(parent=parent, dirname=dirname, children=[])
 
+def new_leaf(parent, filename):
+    return dict(parent=parent, filename=filename)
+
 def find_ancestor(start_node, parents_to_visit):
     ''' Use relative dedent level to determine parent.
         1 dedent -> append new node to parent's parent's child node  
