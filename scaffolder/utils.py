@@ -1,11 +1,11 @@
-def chomp(line): 
+def chomp(line):
     return line[:-1]
 
 def is_empty(line):
-    return line.strip()
+    return line.strip() is ''
 
 def is_comment(line):
-    return line.lstrip().startswith('#')
+    return chomp(line).lstrip().startswith('#')
 
 def is_dir(line):
     return line.rstrip().endswith('/')
@@ -19,11 +19,15 @@ def get_filename(line):
 def get_dirname(line):
     return line.strip().rstrip('/')
 
-def new_node(parent, dirname):
+def new_node(parent=None, dirname=None):
     return  dict(parent=parent, dirname=dirname, children=[])
 
-def new_leaf(parent, filename):
+def new_leaf(parent=None, filename=None):
     return dict(parent=parent, filename=filename)
+
+def clean(lines):
+    return [ chomp(line) for line in lines if not is_empty(line) and not is_comment(line) ] 
+
 
 def find_ancestor(start_node, parents_to_visit):
     ''' Use relative dedent level to determine parent.
