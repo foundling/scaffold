@@ -18,48 +18,39 @@ from utils import chomp, clean, is_empty, is_comment, is_dir, get_indent, get_fi
 
 def build_tree(schema, indent_size, OUTPUT_DIR):
 
-    root = new_node(parent=None, name=OUTPUT_DIR, children=[])
-    node = root
+    virtual_root = new_node(parent=None, name='virtual_root', children[])
+    root = new_node(parent=virtual_root, name=OUTPUT_DIR, children=[])
+    virtual_root['children'].append(root)
     indent = -1
+
+    parent_node = virtual_root
 
     for line in schema:
 
         new_indent = get_indent(line, indent_size)
 
-        # indent
+        # indent - we change the parent node to point to the parent root's last child
+        # then we append children to new parent node's children 
         if new_indent > indent:
+        
+            parent_node = parent_node['children'][-1]
+
             if is_dir(line):
-                node['children'].append( new_node(parent=node, name=get_dirname(line), children=[]) )
+                parent_node['children'].append( new_node(parent=parent_node, name=get_dirname(line), children=[]) )
             else: 
-                node['children'].append( new_node(parent=node, name=get_filename(line), children=None) )
+                parent_node['children'].append( new_node(parent=parent_node, name=get_filename(line), children=None) )
 
-            # note: first is an indent, the rest on the level aren't
-
-
-            # We've come across an indent, so it's a level change. Thus:
-            # append node as a child of current parent 
-            # append new node to current node's children
-            # have node pointer point to this new node
-
-            
 
         # unindent
         elif new_indent < indent:
-            # We've unindented, so we need to travel back up the tree to find the parent of the node
-            # 1. Calculate difference in spaces between indent and new indent. 
-            # 2. Divide by indent space.
-            # 3. Call that n.
-            # 4. Traverse up the tree n parents.    
-            # 5. Set that node to be your new parent node.
-            # 6. Append node or leaf to its children
             pass
 
-        # no change in indentation
+        # no change - add to parent's child array
         else:
             if is_dir(line):
-                node['children'].append( new_node(parent=node, name=get_dirname(line), children=[]) )
+                parent_node['children'].append( new_node(parent=parent_node, name=get_dirname(line), children=[]) )
             else: 
-                node['children'].append( new_node(parent=node, name=get_filename(line), children=None) )
+                parent_node['children'].append( new_node(parent=parent_node, name=get_filename(line), children=None) )
 
             # We haven't changed levels, so:
             # 1. append whatever it is to the child array of the current node
