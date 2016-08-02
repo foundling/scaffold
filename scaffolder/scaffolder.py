@@ -18,7 +18,8 @@ from utils import chomp, clean, is_empty, is_comment, is_dir, get_indent, get_fi
 
 def build_tree(schema, indent_size, OUTPUT_DIR):
 
-    virtual_root = new_node(parent=None, name='virtual_root', children[])
+    # virtual root has the top level dir in its child list, solving the uniformity issue
+    virtual_root = new_node(parent=None, name='virtual_root', children=[])
     root = new_node(parent=virtual_root, name=OUTPUT_DIR, children=[])
     virtual_root['children'].append(root)
     indent = -1
@@ -57,7 +58,7 @@ def build_tree(schema, indent_size, OUTPUT_DIR):
             # 2. leave the node pointer alone
 
         indent = new_indent
-    return root
+    return virtual_root
 
 def main():
 
@@ -70,7 +71,6 @@ def main():
     indent_size = validate_schema(schema)
     tree = build_tree(schema, indent_size, OUTPUT_DIR)
     print len(tree['children'])
-
 
 if __name__ == '__main__':
     main()
