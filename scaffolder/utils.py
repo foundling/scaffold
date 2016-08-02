@@ -10,8 +10,9 @@ def is_comment(line):
 def is_dir(line):
     return line.rstrip().endswith('/')
 
-def get_indent(line):
-    return len(line) - len(line.lstrip())
+def get_indent(line, indent_size):
+    raw_indent = len(line) - len(line.lstrip())
+    return raw_indent / indent_size
 
 def get_filename(line):
     return line.strip()
@@ -19,11 +20,8 @@ def get_filename(line):
 def get_dirname(line):
     return line.strip().rstrip('/')
 
-def new_node(parent=None, dirname=None):
-    return  dict(parent=parent, dirname=dirname, children=[])
-
-def new_leaf(parent=None, filename=None):
-    return dict(parent=parent, filename=filename)
+def new_node(parent=None, name=None, children=None):
+    return  dict(parent=parent, name=name, children=children)
 
 def clean(lines):
     return [ chomp(line) for line in lines if not is_empty(line) and not is_comment(line) ] 
