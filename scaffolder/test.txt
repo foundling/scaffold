@@ -1,0 +1,10 @@
+dir1/
+dir2/
+    file1.txt
+    dir3/
+dir4/
+#    app/
+#    README.txt
+#    LICENSE.txt
+#    docs/
+#    test/

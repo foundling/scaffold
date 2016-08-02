@@ -1,0 +1,6 @@
+dir/
+    f.txt
+    f2.txt
+dir2/
+    a.txt
+    b.txt

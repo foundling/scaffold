@@ -17,6 +17,7 @@ from utils import chomp, clean, is_empty, is_comment, is_dir, get_indent, get_fi
 '''
 
 def build_tree(schema, indent_size, OUTPUT_DIR):
+    ''' parse the indentation level on each line to build a tree structure that can be walked to produce a directory structure. '''
 
     # virtual root has the top level dir in its child list, solving the uniformity issue
     virtual_root = new_node(parent=None, name='virtual_root', children=[])
@@ -44,7 +45,15 @@ def build_tree(schema, indent_size, OUTPUT_DIR):
 
         # unindent
         elif new_indent < indent:
-            pass
+
+            depth = indent - new_indent
+            parent_node = find_ancestor(parent_node, depth)
+
+            if is_dir(line):
+                parent_node['children'].append( new_node(parent=parent_node, name=get_dirname(line), children=[]) )
+            else: 
+                parent_node['children'].append( new_node(parent=parent_node, name=get_filename(line), children=None) )
+
 
         # no change - add to parent's child array
         else:
@@ -62,7 +71,7 @@ def build_tree(schema, indent_size, OUTPUT_DIR):
 
 def main():
 
-    SCHEMA_FILE = '2test.txt'
+    SCHEMA_FILE = 'test.txt'
     OUTPUT_DIR = 'test_output'
 
     schema_lines = open(SCHEMA_FILE).readlines()
@@ -70,7 +79,26 @@ def main():
 
     indent_size = validate_schema(schema)
     tree = build_tree(schema, indent_size, OUTPUT_DIR)
-    print len(tree['children'])
+    print len(tree['children'][0]['children'])
+    print tree['children'][0]['name'] 
+    print tree['children'][0]['children'][0]['name'] 
+    print tree['children'][0]['children'][1]['name'] 
+    print tree['children'][0]['children'][1]['children'][0]['name'] 
+    print tree['children'][0]['children'][1]['children'][1]['children'] 
 
 if __name__ == '__main__':
     main()
+
+'''
+
+dir1/
+app/
+    file1.txt
+    dir2/
+#    app/
+#    README.txt
+#    LICENSE.txt
+#    docs/
+#    test/
+
+'''
