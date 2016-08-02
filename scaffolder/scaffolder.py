@@ -1,7 +1,7 @@
 import json
 import pdb
 
-from utils import chomp, is_empty, is_comment, is_dir, get_indent, get_filename, get_dirname, new_node, find_ancestor, validate_schema, walk_tree
+from utils import chomp, clean, is_empty, is_comment, is_dir, get_indent, get_filename, get_dirname, new_node, find_ancestor, validate_schema, walk_tree
 
 ''' 
     Generates a directory tree from a reasonable, consistently-indented flat file representation. 
@@ -16,76 +16,69 @@ from utils import chomp, is_empty, is_comment, is_dir, get_indent, get_filename,
 
 '''
 
-def build_tree(schema, indent_size):
+def build_tree(schema, indent_size, OUTPUT_DIR):
 
-    root = new_node(None, 'root')
-    current_node = root
-    last_indent = -1 * indent_size
+    root = new_node(parent=None, dirname=OUTPUT_DIR)
+    node = root
+    indent = -1 * indent_size
 
-    #pdb.set_trace()
     for line in schema:
 
         new_indent = get_indent(line)
 
-        if new_indent > last_indent:
-
-            parent = current_node['children'][-1]
-
-            if is_dir(line):
-                dirname = get_dirname(line)
-                new_dir_node = new_node(parent, dirname)
-                parent['children'].append(new_dir_node)
-                current_node = new_dir_node
-
-                last_indent = new_indent
-
-            else:
-                filename = get_filename(line)
-                parent['children'].append(filename)
-
-
-        elif new_indent < last_indent:
-
-            n = (last_indent - new_indent) / indent_size
-            parents_to_visit = n + 1
-            target_parent = find_ancestor(current_node, parents_to_visit)
+        if new_indent > indent:
+            indent = new_indent
+            # We've come across an indent, so it's a level change. Thus:
+            # 1. adjust the indentation
+            # 2. create a new node
+            # 3. append new node to current node's children
+            # 4. have node pointer point to this new node
 
             if is_dir(line):
-                parent = target_parent
-                dirname = get_dirname(line)
-                target_parent['children'].append(parent, dirname)
+                node['children'].append( new_node(parent=node,dirname=get_dirname(line)) )
+                node = node['children'][-1]
 
             else:
-                filename = get_filename(line)
-                target_parent['children'].append(filename)
+                pass
 
-            current_node = target_parent
+        elif new_indent < indent:
+            # We've unindented, so we need to travel back up the tree to find the parent of the node
+            # 1. Calculate difference in spaces between indent and new indent. 
+            # 2. Divide by indent space.
+            # 3. Call that n.
+            # 4. Traverse up the tree n parents.    
+            # 5. Set that node to be your new parent node.
+            # 6. Append node or leaf to its children
+
+            node = find_ancestor(node, n)
+
+            if is_dir(line):
+                node['children'].append(new_node(parent=node['parent'], dirname=get_dirname(line)))
+            else:
+                node['children'].append(new_leaf(parent=node['parent'], filename=get_filename(line)))
 
         else:
+            # We haven't changed levels, so:
+            # 1. append whatever it is to the child array of the current node
+            # 2. leave the node pointer alone
 
             if is_dir(line):
-                parent = current_node['parent'] # if indentation is 0, parent is null, which is WRONG 
-                dirname = get_dirname(line)
-                new_dir_node = new_node(parent, dirname)
-                current_node['children'].append(new_dir_node)
-
+                node['children'].append(new_node(parent=node['parent'], dirname=get_dirname(line)))
             else:
-                filename = get_filename(line)
-                leaf = new_leaf()
-                current_node['children'].append() 
-
+                node['children'].append(new_leaf(parent=node['parent'], filename=get_filename(line)))
 
     return root
 
 def main():
 
-    schema_file = '2test.txt'
-    schema = [  chomp(line) 
-                for line in open(schema_file).readlines() 
-                if not is_empty(line) or not is_comment(line) ]
+    SCHEMA_FILE = '2test.txt'
+    OUTPUT_DIR = 'test_output'
+
+    schema_lines = open(SCHEMA_FILE).readlines()
+    schema = clean(schema_lines)
 
     indent_size = validate_schema(schema)
-    tree = build_tree(schema, indent_size)
+    tree = build_tree(schema, indent_size, OUTPUT_DIR)
     print tree
 
 if __name__ == '__main__':
