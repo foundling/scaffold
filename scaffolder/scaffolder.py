@@ -13,34 +13,33 @@
 
 '''
 
-from utils import chomp, clean, is_empty, is_comment, is_dir, get_indent, parse_indent, get_filename, get_dirname, new_node, find_ancestor
-
+import utils
 
 def build_tree(schema, indent_size, OUTPUT_DIR):
     ''' Use indentation level of each line relative to the previous indentation level to build a tree structure. '''
 
     # virtual root provides a way to parse the indentation consistently.  
-    virtual_root = new_node(parent=None, name='virtual_root', children=[])
-    root = new_node(parent=virtual_root, name=OUTPUT_DIR, children=[])
+    virtual_root = utils.new_node(parent=None, name='virtual_root', children=[])
+    root = utils.new_node(parent=virtual_root, name=OUTPUT_DIR, children=[])
     virtual_root['children'].append(root)
     parent_node = virtual_root
 
     indent = -1
     for line in schema:
 
-        new_indent = get_indent(line, indent_size)
+        new_indent = utils.get_indent(line, indent_size)
 
         if new_indent > indent:
             parent_node = parent_node['children'][-1]
 
         elif new_indent < indent:
             depth = indent - new_indent
-            parent_node = find_ancestor(parent_node, depth)
+            parent_node = utils.find_ancestor(parent_node, depth)
 
-        child = new_node(
+        child = utils.new_node(
             parent   = parent_node, 
-            name     = get_dirname(line) if is_dir(line) else get_filename(line), 
-            children = [] if is_dir(line) else None
+            name     = utils.get_dirname(line) if utils.is_dir(line) else utils.get_filename(line), 
+            children = [] if utils.is_dir(line) else None
         ) 
         parent_node['children'].append(child)
 
@@ -82,14 +81,14 @@ def validate_schema(schema_lines):
 
     # Initialize indent and line number of first indent
     for index, line in enumerate(schema_lines):
-        if parse_indent(line) > 0:
-            indent = parse_indent(line)
+        if utils.parse_indent(line) > 0:
+            indent = utils.parse_indent(line)
             start_index = index + 1
             break
 
     last_indent = indent
     for index, line in enumerate( schema_lines[start_index:] ):
-        this_indent = parse_indent(line) 
+        this_indent = utils.parse_indent(line) 
         difference = this_indent - last_indent
 
         if (difference == 0) or (difference == indent) or (difference < 0 and less_by_factor_of_indent(this_indent, indent)):
@@ -108,7 +107,7 @@ def main():
 
     schema_lines = open(SCHEMA_FILE).readlines()
     validate_schema(schema_lines)
-    schema = clean(schema_lines)
+    schema = utils.clean(schema_lines)
 
     indent_size = validate_schema(schema)
     tree = build_tree(schema, indent_size, OUTPUT_DIR)
