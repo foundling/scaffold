@@ -15,22 +15,15 @@ from utils import chomp, clean, is_empty, is_comment, is_dir, get_indent, get_fi
 
 '''
 
-def walk_tree(tree, indent):
-    for node in tree['children']:
-        if node['children'] is not None:
-            print ''.join([indent * ' ', node['name'] + '/'])
-            walk_tree(node, indent + 4)
-        else:
-            print ''.join([indent * ' ', node['name']])
-
 def build_tree(schema, indent_size, OUTPUT_DIR):
-    ''' parse the indentation level on each line to build a tree structure that can be walked to produce a directory structure. '''
+    ''' use the indentation level on each line relative to the previous indentation level to build a tree structure. '''
 
-    # virtual root has the top level dir in its child list, solving the uniformity issue
+    indent = -1
+
+    # virtual root provides a way to parse the indentation consistently.  
     virtual_root = new_node(parent=None, name='virtual_root', children=[])
     root = new_node(parent=virtual_root, name=OUTPUT_DIR, children=[])
     virtual_root['children'].append(root)
-    indent = -1
 
     parent_node = virtual_root
 
@@ -38,43 +31,29 @@ def build_tree(schema, indent_size, OUTPUT_DIR):
 
         new_indent = get_indent(line, indent_size)
 
-        # indent - we change the parent node to point to the parent root's last child
-        # then we append children to new parent node's children 
         if new_indent > indent:
-        
             parent_node = parent_node['children'][-1]
 
-            if is_dir(line):
-                parent_node['children'].append( new_node(parent=parent_node, name=get_dirname(line), children=[]) )
-            else: 
-                parent_node['children'].append( new_node(parent=parent_node, name=get_filename(line), children=None) )
-
-
-        # unindent
         elif new_indent < indent:
-
             depth = indent - new_indent
             parent_node = find_ancestor(parent_node, depth)
 
-            if is_dir(line):
-                parent_node['children'].append( new_node(parent=parent_node, name=get_dirname(line), children=[]) )
-            else: 
-                parent_node['children'].append( new_node(parent=parent_node, name=get_filename(line), children=None) )
-
-
-        # no change - add to parent's child array
-        else:
-            if is_dir(line):
-                parent_node['children'].append( new_node(parent=parent_node, name=get_dirname(line), children=[]) )
-            else: 
-                parent_node['children'].append( new_node(parent=parent_node, name=get_filename(line), children=None) )
-
-            # We haven't changed levels, so:
-            # 1. append whatever it is to the child array of the current node
-            # 2. leave the node pointer alone
+        if is_dir(line):
+            parent_node['children'].append( new_node(parent=parent_node, name=get_dirname(line), children=[]) )
+        else: 
+            parent_node['children'].append( new_node(parent=parent_node, name=get_filename(line), children=None) )
 
         indent = new_indent
+
     return virtual_root
+
+def walk_tree(tree, indent):
+    for node in tree['children']:
+        if node['children'] is not None:
+            print ''.join([indent * ' ', node['name'] + '/'])
+            walk_tree(node, indent + 4)
+        else:
+            print ''.join([indent * ' ', node['name']])
 
 def main():
 
