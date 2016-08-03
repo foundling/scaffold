@@ -1,4 +1,3 @@
-import json
 import pdb
 
 from utils import chomp, clean, is_empty, is_comment, is_dir, get_indent, get_filename, get_dirname, new_node,  find_ancestor, validate_schema, walk_tree
@@ -15,6 +14,14 @@ from utils import chomp, clean, is_empty, is_comment, is_dir, get_indent, get_fi
         - Indentation must be preceded by a directory.
 
 '''
+
+def walk_tree(tree, indent):
+    for node in tree['children']:
+        if node['children'] is not None:
+            print ''.join([indent * ' ', node['name'] + '/'])
+            walk_tree(node, indent + 4)
+        else:
+            print ''.join([indent * ' ', node['name']])
 
 def build_tree(schema, indent_size, OUTPUT_DIR):
     ''' parse the indentation level on each line to build a tree structure that can be walked to produce a directory structure. '''
@@ -79,12 +86,8 @@ def main():
 
     indent_size = validate_schema(schema)
     tree = build_tree(schema, indent_size, OUTPUT_DIR)
-    print len(tree['children'][0]['children'])
-    print tree['children'][0]['name'] 
-    print tree['children'][0]['children'][0]['name'] 
-    print tree['children'][0]['children'][1]['name'] 
-    print tree['children'][0]['children'][1]['children'][0]['name'] 
-    print tree['children'][0]['children'][1]['children'][1]['children'] 
+    walk_tree(tree, 0)
+
 
 if __name__ == '__main__':
     main()
