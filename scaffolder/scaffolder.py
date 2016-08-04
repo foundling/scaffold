@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 ''' 
     Scaffolder.py
 
@@ -13,110 +16,44 @@
 
 '''
 
+import os
+import sys
+
+import click
+
 import utils
-
-def build_tree(schema, indent_size, OUTPUT_DIR):
-    ''' Use indentation level of each line relative to the previous indentation level to build a tree structure. '''
-
-    # virtual root provides a way to parse the indentation consistently.  
-    virtual_root = utils.new_node(parent=None, name='virtual_root', children=[])
-    root = utils.new_node(parent=virtual_root, name=OUTPUT_DIR, children=[])
-    virtual_root['children'].append(root)
-    parent_node = virtual_root
-
-    indent = -1
-    for line in schema:
-
-        new_indent = utils.get_indent(line, indent_size)
-
-        if new_indent > indent:
-            parent_node = parent_node['children'][-1]
-
-        elif new_indent < indent:
-            depth = indent - new_indent
-            parent_node = utils.find_ancestor(parent_node, depth)
-
-        child = utils.new_node(
-            parent   = parent_node, 
-            name     = utils.get_dirname(line) if utils.is_dir(line) else utils.get_filename(line), 
-            children = [] if utils.is_dir(line) else None
-        ) 
-        parent_node['children'].append(child)
-
-        indent = new_indent
-
-    return virtual_root
-
-def walk_tree(tree, indent, callback):
-
-    for node in tree['children']:
-        filename = node['name']
-        if node['children'] is not None:
-            callback(filename + '/', indent)
-            walk_tree(node, indent + 4, callback)
-        else:
-            callback(filename, indent)
-
-def validate_schema(schema_lines):
-
-    ''' Validates schema and returns indent size if valid, otherwise raises ValueError.
-
-        Once an indent size N is determined, each indentation level must be:
-
-            1) less than N by a multiple of N,  e.g. 8 -> 4 or 8 -> 0
-            2) 0, or 
-            3) preceded by a directory and greater than N by exactly N.
-    '''
-
-    def less_by_factor_of_indent(this_indent, indent):
-        ''' Returns True if the current indent reaches 0 when the global indent size is repeatedly subtracted from it. Otherwise returns False. '''  
-
-        while this_indent > 0:
-            this_indent -= indent
-
-        return this_indent == 0 
-
-    indent = None 
-    start_index = 0
-
-    # Initialize indent and line number of first indent
-    for index, line in enumerate(schema_lines):
-        if utils.parse_indent(line) > 0:
-            indent = utils.parse_indent(line)
-            start_index = index + 1
-            break
-
-    last_indent = indent
-    for index, line in enumerate( schema_lines[start_index:] ):
-        this_indent = utils.parse_indent(line) 
-        difference = this_indent - last_indent
-
-        if (difference == 0) or (difference == indent) or (difference < 0 and less_by_factor_of_indent(this_indent, indent)):
-            last_indent = this_indent
-            continue
-        else:
-            raise ValueError('Parsing error on line {}:\n\n{}: {}'.format(index + start_index + 1, index + start_index +1, line))
-
-    return indent
-
+import tree
+import validator
 
 def main():
 
-    SCHEMA_FILE = 'test.txt'
-    OUTPUT_DIR = 'test_output'
+    # provisional argument handling to be replaced by click
+    if len(sys.argv) < 2:
+        utils.usage()
+        sys.exit(1)
+
+    if len(sys.argv) == 2:
+        SCHEMA_FILE = sys.argv[1] 
+        OUTPUT_DIR = 'output_dir'
+
+    if len(sys.argv) >= 3:
+
+        if os.path.isdir(sys.argv[2]):
+            print ("The output directory '{}' exists. In order to run scaffolder successfully, \n"
+                    "either rename your output directory or rename the currently existing directory.").format(OUTPUT_DIR)
+            sys.exit(1) 
+        else:
+            SCHEMA_FILE = sys.argv[1]
+            OUTPUT_DIR = sys.argv[2]
+
 
     schema_lines = open(SCHEMA_FILE).readlines()
-    validate_schema(schema_lines)
+    indent_size = validator.validate_schema(schema_lines)
     schema = utils.clean(schema_lines)
 
-    indent_size = validate_schema(schema)
-    tree = build_tree(schema, indent_size, OUTPUT_DIR)
+    dir_tree = tree.build_tree(schema, indent_size, OUTPUT_DIR)
 
-    def print_line(line, indent_size=0):
-        indented_line = indent_size * ' ' + line
-        print indented_line
-
-    walk_tree(tree, 0, callback=print_line)
+    tree.walk_tree(dir_tree, 0, callback=utils.print_line)
 
 
 if __name__ == '__main__':
