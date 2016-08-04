@@ -4,7 +4,26 @@
 ''' 
     Scaffolder.py
 
-    Generates a directory tree from a reasonable, consistently-indented flat file representation. 
+    Generates a directory tree from a reasonable, consistently-indented flat file representation of a file system. 
+
+    Here's an example:
+
+    scaffolder/
+        scaffolder/
+            scaffolder.py
+            validator.py
+            tree.py
+            test/
+                scaffolder_test.py
+                validator_test.py
+                tree_test.py
+            README.md
+            LICENSE.md
+
+        test/
+        docs/
+        README.md
+        LICENSE.md
 
     Rules:
         - The indentation level must be consistent throughout the schema file. 
