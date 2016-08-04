@@ -38,7 +38,9 @@ def validate_schema(schema_lines):
         this_indent = utils.parse_indent(line) 
         difference = this_indent - last_indent
 
-        if (difference == 0) or (difference == indent and utils.is_dir(prev_line)) or (difference < 0 and utils.is_multiple_of_indent(this_indent, indent)):
+        if (difference == 0) or\
+           (difference == indent and utils.is_dir(prev_line)) or\
+           (difference < 0 and utils.is_multiple_of_indent(this_indent, indent)):
             last_indent = this_indent
             continue
         else:
@@ -48,5 +50,3 @@ def validate_schema(schema_lines):
         prev_line = line
 
     return indent
-
-

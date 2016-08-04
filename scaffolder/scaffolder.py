@@ -9,9 +9,13 @@
     Rules:
         - The indentation level must be consistent throughout the schema file. 
         - Lines that end with a '/' are directories. Everything else is a file. 
-        - If a command-line argument for the root directory is not given, the schema must contain a single top-level directory.
-        - If a command-line argument for the root directory is given, multiple top-level directories are allowed.
-        - Blank lines (lines of length 0 after being stripped of whitespace) and comments (lines starting with '#' after being stripped of whitespace) are ignored.
+        - If a command-line argument for the root directory is not given, the schema must contain a 
+        single top-level directory.
+        - If a command-line argument for the root directory is given, multiple top-level directories 
+        are allowed.
+        - Blank lines (lines of length 0 after being stripped of whitespace) and comments (lines starting with 
+        '#' after
+        being stripped of whitespace) are ignored.
         - Indentation must be preceded by a directory.
 
 '''
@@ -21,8 +25,8 @@ import sys
 
 import click
 
+from tree import Tree
 import utils
-import tree
 import validator
 
 def main():
@@ -46,15 +50,13 @@ def main():
             SCHEMA_FILE = sys.argv[1]
             OUTPUT_DIR = sys.argv[2]
 
-
     schema_lines = open(SCHEMA_FILE).readlines()
     indent_size = validator.validate_schema(schema_lines)
     schema = utils.clean(schema_lines)
 
-    dir_tree = tree.build_tree(schema, indent_size, OUTPUT_DIR)
-
-    tree.walk_tree(dir_tree, 0, callback=utils.print_line)
-
+    directory_tree = Tree(schema, indent_size, OUTPUT_DIR)
+    directory_tree.build_tree()
+    directory_tree.walk_tree(tree=directory_tree.tree, indent=0, callback=utils.print_line)
 
 if __name__ == '__main__':
     main()

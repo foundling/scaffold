@@ -5,7 +5,7 @@ def usage():
     Usage: scaffolder SCHEMA_FILE [TARGET]
     '''
 
-def print_line(line, indent_size=0):
+def print_line(line, indent_size):
     indented_line = indent_size * ' ' + line
     print indented_line
 
