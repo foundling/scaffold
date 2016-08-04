@@ -46,24 +46,9 @@ def get_indent(line, indent_size):
 
     return rv
             
-def get_filename(line):
-    return line.strip()
-
 def get_dirname(line):
     return line.strip().rstrip('/')
 
-def new_node(parent=None, name=None, children=None):
-    return  dict(parent=parent, name=name, children=children)
+def get_filename(line):
+    return line.strip()
 
-def find_ancestor(start_node, parents_to_visit):
-    ''' Use relative dedent level to determine parent.
-        1 dedent -> append new node to parent's parent's child node  
-        N is a unit of dedent, then we travel up N + 1 parents and append a new node to its children
-    '''
-    current_node = start_node
-
-    while (parents_to_visit > 0):
-        current_node = current_node['parent']
-        parents_to_visit -= 1
-
-    return current_node
