@@ -1,12 +1,25 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+
+import datetime
+import os
+import sys
+
+import click
+
+from tree import Tree
+import utils
+import validator
+
+
+
 ''' 
-    Scaffolder.py
+    scaffolder.py
 
-    Generates a directory tree from a reasonable, consistently-indented flat file representation of a file system. 
+    generates a directory tree from a reasonable, consistently-indented flat file representation of a file system. 
 
-    Here's an example:
+    here's an example:
 
     scaffolder/
         scaffolder/
@@ -17,65 +30,93 @@
                 scaffolder_test.py
                 validator_test.py
                 tree_test.py
-            README.md
-            LICENSE.md
-
+            readme.md
+            license.md
         test/
         docs/
-        README.md
-        LICENSE.md
+        readme.md
+        license.md
 
-    Rules:
-        - The indentation level must be consistent throughout the schema file. 
-        - Lines that end with a '/' are directories. Everything else is a file. 
-        - If a command-line argument for the root directory is not given, the schema must contain a 
+    rules:
+        - the indentation level must be consistent throughout the schema file. 
+        - lines that end with a '/' are directories. everything else is a file. 
+        - if a command-line argument for the root directory is not given, the schema must contain a 
         single top-level directory.
-        - If a command-line argument for the root directory is given, multiple top-level directories 
+        - if a command-line argument for the root directory is given, multiple top-level directories 
         are allowed.
-        - Blank lines (lines of length 0 after being stripped of whitespace) and comments (lines starting with 
+        - blank lines (lines of length 0 after being stripped of whitespace) and comments (lines starting with 
         '#' after
         being stripped of whitespace) are ignored.
-        - Indentation must be preceded by a directory.
+        - indentation must be preceded by a directory.
 
 '''
 
-import os
-import sys
+def handle_args(*args):
 
-import click
+    #
+    #  Provisional argument handling to be replaced by click.
+    #
+    #  Usage: scaffolder SCHEMA [OUTPUT_DIR]
+    #
+    
+    schema_file = None
+    output_dir = None
 
-from tree import Tree
-import utils
-import validator
-
-def main():
-
-    # provisional argument handling to be replaced by click
-    if len(sys.argv) < 2:
+    if len(args) < 2:
         utils.usage()
         sys.exit(1)
 
-    if len(sys.argv) == 2:
-        SCHEMA_FILE = sys.argv[1] 
-        OUTPUT_DIR = 'output_dir'
+    if len(args) == 2:
+        schema_file = args[1] 
 
-    if len(sys.argv) >= 3:
+        dt_now = datetime.datetime.now()
+        date_string = str(dt_now) 
+        date_label = datestring.split(' ')[0]
+        output_dir = 'SCAFFOLD_OUTPUT_{}'.format(date_label)
 
-        if os.path.isdir(sys.argv[2]):
-            print ("The output directory '{}' exists. In order to run scaffolder successfully, \n"
-                    "either rename your output directory or rename the currently existing directory.").format(OUTPUT_DIR)
+    if len(args) > 2:
+
+        if os.path.isdir(args[2]):
+            print ("An error has occurred: the output directory '{}' exists. In order to run scaffolder successfully, \n"
+            "either rename your output directory or rename the currently directory with the name you've supplied.").format(output_dir)
+            utils.usage()
             sys.exit(1) 
+
         else:
-            SCHEMA_FILE = sys.argv[1]
-            OUTPUT_DIR = sys.argv[2]
+            schema_file = args[]
+            output_dir = args[]   
+
+
+def main():
+
+    SCHEMA_FILE, OUTPUT_DIR = handle_args(sys.argv)
 
     schema_lines = open(SCHEMA_FILE).readlines()
     indent_size = validator.validate_schema(schema_lines)
     schema = utils.clean(schema_lines)
 
-    directory_tree = Tree(schema, indent_size, OUTPUT_DIR)
+    directory_tree = Tree(
+        input=schema,
+        indent_size=indent_size,
+        output_dir=OUTPUT_DIR
+    )
     directory_tree.build_tree()
-    directory_tree.walk_tree(tree=directory_tree.tree, indent=0, callback=utils.print_line)
+
+    def make_line_printer(indent, indent_char=' '):
+
+        def _print_line(node):
+            ''' The contract with directory_tree: args are a dict with parent, children and value properties. '''
+
+            line = node['name']
+            if node['children'] is not None:
+                line += '/'
+
+            print (indent * indent_char) + line
+
+        return _print_line
+
+    line_printer = make_line_printer(indent_size)
+    directory_tree.walk(callback=line_printer)
 
 if __name__ == '__main__':
     main()
