@@ -57,7 +57,7 @@ class Tree:
                 if node['children'] is not None:
                     # removed indent
                     callback(node)
-                    self._walk(node)
+                    _walk(node)
                 else:
                     # removed indent
                     callback(node)
