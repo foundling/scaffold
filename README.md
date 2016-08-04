@@ -1,6 +1,6 @@
 # Scaffolder
 
-Scaffolder generates a directory tree from a reasonable, consistently-indented flat file representation of a file system. 
+Scaffolder generates a directory tree from a reasonable, consistently-indented flat file representation of a directory structure. 
 
 here's an example:
 
