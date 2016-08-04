@@ -16,26 +16,7 @@ class Validator():
         self.indent = None
         self._schema_lines = schema_lines
 
-    #
-    # Initialize indent and line number of first indent.
-    #
-    def find_first_indent(self):
-        ''' returns tuple(indent_value, index in schema lines) '''
-
-        indent, start_index = 0, 0 
-
-        for index, line in enumerate(self._schema_lines):
-            if parse_indent(line) > 0:
-                indent = parse_indent(line)
-                break
-
-        return indent, start_index
-
     def validate(self):
-
-        #
-        # Parse according to the validation rules, starting at the line after the first indent.
-        #
 
         is_valid = True
 
@@ -66,3 +47,15 @@ class Validator():
             prev_line = line
 
         return is_valid
+
+    def find_first_indent(self):
+        ''' returns tuple(indent_value, index in schema lines) '''
+
+        indent, start_index = 0, 0 
+
+        for index, line in enumerate(self._schema_lines):
+            if parse_indent(line) > 0:
+                indent = parse_indent(line)
+                break
+
+        return indent, start_index

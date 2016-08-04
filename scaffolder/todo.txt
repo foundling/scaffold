@@ -1,0 +1,8 @@
+
+Take a directory structure and turn it into a schema file.
+
+Config hooks for templates: when it finds a file or dir 
+name in your schema, it looks in a template dir for that stock 
+file. need to enable it by passing -c flag.  
+
+

@@ -10,15 +10,14 @@ class Tree:
         self.root = self.build_tree()
         self.traversal_funcs = []
 
-
     def build_tree(self):
         ''' Use indentation level of each line relative to the previous indentation level to build a tree structure. '''
 
         # 'virtuale root' is the parent of the root. It provides a way 
         # to parse the indentation in a loop more consistently.  
 
-        virtual_root = self.make_new_node(parent=None, value='virtual_root', children=[])
-        root = self.make_new_node(parent=virtual_root, value=self.output_dir, children=[])
+        virtual_root = self._make_new_node(parent=None, value='virtual_root', children=[])
+        root = self._make_new_node(parent=virtual_root, value=self.output_dir, children=[])
         virtual_root['children'].append(root)
 
         parent_node = virtual_root
@@ -33,9 +32,9 @@ class Tree:
 
             elif new_indent < indent:
                 depth = indent - new_indent
-                parent_node = self.find_ancestor(parent_node, depth)
+                parent_node = self._find_ancestor(parent_node, depth)
 
-            child = self.make_new_node(
+            child = self._make_new_node(
                 parent   = parent_node, 
                 value    = utils.get_dirname(line) if utils.is_dir(line) else utils.get_filename(line), 
                 children = [] if utils.is_dir(line) else None
@@ -44,20 +43,6 @@ class Tree:
             indent = new_indent
 
         return virtual_root
-
-    def make_new_node(self, parent=None, value=None, children=None):
-        ''' create a new node. if children is Nonetype, node is treated as a leaf. '''
-        return  dict(parent=parent, value=value, children=children)
-
-    def find_ancestor(self, start_node, parents_to_visit):
-        ''' use indentation level relative to previous line to find ancestor.'''
-        current_node = start_node
-
-        while (parents_to_visit > 0):
-            current_node = current_node['parent']
-            parents_to_visit -= 1
-
-        return current_node
 
     def walk(self, callback):
         ''' The contract with Tree: args are a dict with parent, children and value properties. '''
@@ -78,3 +63,17 @@ class Tree:
                     callback(node)
 
         _walk()
+
+    def _make_new_node(self, parent=None, value=None, children=None):
+        ''' create a new node. if children is Nonetype, node is treated as a leaf. '''
+        return  dict(parent=parent, value=value, children=children)
+
+    def _find_ancestor(self, start_node, parents_to_visit):
+        ''' use indentation level relative to previous line to find ancestor.'''
+        current_node = start_node
+
+        while (parents_to_visit > 0):
+            current_node = current_node['parent']
+            parents_to_visit -= 1
+
+        return current_node
