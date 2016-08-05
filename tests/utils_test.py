@@ -41,7 +41,7 @@ def test_is_empty():
 
 def test_is_comment():
     comment = '# this is a comment'
-    comment_multiple_pounds = '# this is a comment'
+    comment_multiple_pounds = '## this is a comment'
     dir_name = 'dir2/'
     empty_space = ''
 
