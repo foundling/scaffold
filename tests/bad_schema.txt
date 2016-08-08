@@ -1,0 +1,13 @@
+scaffolder/
+  docs/
+    scaffolder/
+        scaffolder.py
+        validator.py
+        tree.py
+    test/
+        scaffolder_test.py
+        validator_test.py
+        tree_test.py
+    README.md
+    LICENSE.md
+    test/

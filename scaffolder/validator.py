@@ -19,7 +19,7 @@ class Validator():
 
     def validate(self):
 
-        first_indent, start_index = self._find_first_indent()
+        indent, start_index = self._find_first_indent()
         prev_indent = indent
         prev_line = self.schema[start_index]
 
@@ -38,7 +38,7 @@ class Validator():
 
             prev_line = line
 
-        return first_indent
+        return indent
 
     def raise_parse_error(self, line_number=None, line=None):
         msg = 'A parsing error occurred on line {}.\n{}\n'.format(line_number, line)

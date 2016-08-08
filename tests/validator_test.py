@@ -6,12 +6,13 @@ import pytest
 from scaffolder.validator import Validator
 
 
-schema = '''
-dir1/
-dir2/
-'''
+def test_load_schema():
 
+    assert Validator(good_schema).schema
 
-def test_val():
-    validator = Validator(schema)
-    assert validator.schema
+def test_validate():
+
+    assert Validator(good_schema).validate()
+
+    with pytest.raises(ValueError):
+        assert Validator(bad_schema).validate()

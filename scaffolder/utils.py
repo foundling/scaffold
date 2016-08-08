@@ -8,7 +8,7 @@ def usage(out=sys.stdout):
     out.write('Usage: scaffolder SCHEMA_FILE [TARGET]\n')
 
 def clean(lines):
-    return [ line.strip() for line in lines if not is_empty(line) and not is_comment(line) ] 
+    return [ line.rstrip() for line in lines if not is_empty(line) and not is_comment(line) ] 
 
 def is_empty(line):
     return line.strip() is ''

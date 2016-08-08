@@ -17,12 +17,12 @@ def test_clean():
     lines = [
         '\n',
         '# this is a comment\n',
-        'dir2/\n',
-        'one two three\n',
+        '   dir2/\n',
+        '       one two three\n',
     ]
     expected_lines = [
-        'dir2/',
-        'one two three',
+        '   dir2/',
+        '       one two three',
     ]
     result = utils.clean(lines)
 
