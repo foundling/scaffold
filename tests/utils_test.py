@@ -113,3 +113,17 @@ def test_get_filename():
 
     assert utils.get_filename('dir2') == 'dir2'
     assert utils.get_filename('  dir2  ') == 'dir2'
+
+def test_handle_args():
+
+    args = ('scaffolder', 'schema.txt')
+    schema, output_dir = utils.handle_args(args)
+
+    assert type(schema) == str
+    assert output_dir.startswith('SCAFFOLDER_OUTPUT') 
+
+    args = ('scaffolder', 'schema.txt', 'output_dir')
+    schema, output_dir = utils.handle_args(args)
+
+    assert type(schema) == str
+    assert output_dir.startswith('output_dir') 

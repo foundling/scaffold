@@ -80,7 +80,7 @@ def handle_args(args):
         dt_now = datetime.datetime.now()
         date_string = str(dt_now) 
         date_label = date_string.split(' ')[0]
-        output_dir = 'SCAFFOLD_OUTPUT_{}'.format(date_label)
+        output_dir = 'SCAFFOLDER_OUTPUT_{}'.format(date_label)
 
     if len(args) > 2:
 
