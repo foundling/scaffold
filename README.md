@@ -1,6 +1,6 @@
 # Scaffolder
 
-Scaffolder is a command-line tool for Linux, OSX and WIndows that generates a directory tree from a reasonable, consistently-indented flat file representation.
+Scaffolder is a command-line tool for Linux, OSX and Windows that generates a directory tree from a reasonable, consistently-indented flat file representation.
 
 ## Installation:
 
