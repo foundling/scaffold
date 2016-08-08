@@ -1,3 +1,4 @@
+import os
 import utils
 import pdb
 
@@ -6,7 +7,10 @@ class Tree:
     def __init__(self, indent_size=None, output_dir=None):
 
         self.indent_size = indent_size
-        self.output_dir = output_dir
+        if output_dir.startswith('/'):
+            self.new_tree_root = self.output_dir.split('/')[:-1]
+        else:
+            self.new_tree_root
         self.data = None
         self.root = None
 

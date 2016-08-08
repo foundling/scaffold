@@ -36,5 +36,7 @@ def main():
     line_printer = make_line_printer(indent_size)
     directory_tree.walk(callback=line_printer)
 
+    #directory_tree.walk(callback=file_creator)
+
 if __name__ == '__main__':
     main()

@@ -1,3 +1,5 @@
+import os
+
 ''' 
     walk_funcs.py
 
@@ -17,4 +19,22 @@ def make_line_printer(indent, indent_char=' '):
 
     return _print_line
 
+def make_file_creator(base_dir):
+    ''' approach: write files from a single location using stack.  '''
 
+    def file_creator(node):
+
+        filename = node['value']
+        children = node['children']
+
+        if children is None:
+            if not os.path.exists(filename):
+                try:
+                    open(filename,'w')
+                except IOError:
+                    print "IO ERROR when attempting to write the file '{}' to the directory {}.".format(filename, cur_dir)
+        else:
+            try:
+                os.mkdir(filename)
+            except IOError:
+                print "IO ERROR when attempting to create directory '{}' to the directory {}.".format(filename, cur_dir)
