@@ -10,7 +10,7 @@ import click
 
 from tree import Tree
 import utils
-import validator
+from validator import Validator
 from walk_funcs import make_line_printer
 
 def main():
@@ -19,17 +19,19 @@ def main():
 
     raw_lines = open(SCHEMA_FILE).readlines()
     schema = utils.clean(raw_lines)
-    indent_size = validator.validate_schema(schema)
+
+    validator = Validator()
+    validator.load_schema(schema)
+    indent_size = validator.validate()
 
     directory_tree = Tree(
 
-        data = schema,
         indent_size = indent_size,
         output_dir = OUTPUT_DIR
 
-    ).build_tree()
+    ).load_data(schema).build_tree()
 
-    line_printer = walk_funcs.make_line_printer(indent_size)
+    line_printer = make_line_printer(indent_size)
     directory_tree.walk(callback=line_printer)
 
 if __name__ == '__main__':

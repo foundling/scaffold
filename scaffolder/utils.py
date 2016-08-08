@@ -1,4 +1,8 @@
+import datetime
+
+import os
 import sys
+
 
 '''  
     Utility functions for scaffolder.py.  
@@ -67,7 +71,7 @@ def handle_args(args):
     output_dir = None
 
     if len(args) < 2:
-        utils.usage()
+        usage()
         sys.exit(1)
 
     if len(args) == 2:
@@ -83,7 +87,7 @@ def handle_args(args):
         if os.path.isdir(args[2]):
             print ("An error has occurred: the output directory '{}' exists. In order to run scaffolder successfully, \n"
             "either rename your output directory or rename the currently directory with the name you've supplied.").format(output_dir)
-            utils.usage()
+            usage()
             sys.exit(1) 
 
         else:
