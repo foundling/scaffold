@@ -11,7 +11,7 @@ class Tree:
         self.root = None
 
     def build_tree(self):
-        ''' Use indentation level of each line relative to the previous indentation level to build a tree structure. '''
+        ''' Derive parent/child hierarchy from relationship in indentation between current and previous line.  '''
 
         virtual_root = self._make_new_node(
             parent=None,

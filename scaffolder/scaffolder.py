@@ -11,7 +11,7 @@ import click
 from tree import Tree
 import utils
 import validator
-import walk_funcs
+from walk_funcs import make_line_printer
 
 def main():
 
@@ -23,9 +23,9 @@ def main():
 
     directory_tree = Tree(
 
-        data=schema,
-        indent_size=indent_size,
-        output_dir=OUTPUT_DIR
+        data = schema,
+        indent_size = indent_size,
+        output_dir = OUTPUT_DIR
 
     ).build_tree()
 
