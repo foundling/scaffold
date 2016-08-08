@@ -1,4 +1,4 @@
-from utils import parse_indent, is_empty, is_comment, is_dir, is_multiple_of_indent
+from utils import parse_indent, is_empty, is_comment, is_dir, is_multiple_of_indent, clean
 
 ''' 
     Validates schema and returns indent size if valid, otherwise raises ValueError.
@@ -12,12 +12,15 @@ from utils import parse_indent, is_empty, is_comment, is_dir, is_multiple_of_ind
 
 class Validator():
 
-    def __init__(self, schema):
+    def __init__(self):
 
         self.indent = None
-        self.schema = schema
+        self.schema = None
 
     def validate(self):
+
+        if self.schema is None:
+            raise ValueError('The Schema file has not been loaded. Load first, then call .validate') 
 
         indent, start_index = self._find_first_indent()
         prev_indent = indent
@@ -43,6 +46,9 @@ class Validator():
     def raise_parse_error(self, line_number=None, line=None):
         msg = 'A parsing error occurred on line {}.\n{}\n'.format(line_number, line)
         raise ValueError(msg)
+
+    def load_schema(self, schema):
+        self.schema = clean(schema)
 
     def _find_first_indent(self):
         ''' returns indent_value, start_index '''
