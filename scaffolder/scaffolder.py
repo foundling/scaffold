@@ -51,7 +51,7 @@ import validator
 
 '''
 
-def handle_args(*args):
+def handle_args(args):
 
     #
     #  Provisional argument handling to be replaced by click.
@@ -71,7 +71,7 @@ def handle_args(*args):
 
         dt_now = datetime.datetime.now()
         date_string = str(dt_now) 
-        date_label = datestring.split(' ')[0]
+        date_label = date_string.split(' ')[0]
         output_dir = 'SCAFFOLD_OUTPUT_{}'.format(date_label)
 
     if len(args) > 2:
@@ -83,24 +83,23 @@ def handle_args(*args):
             sys.exit(1) 
 
         else:
-            schema_file = args[]
-            output_dir = args[]   
+            schema_file = args[1]
+            output_dir = args[2]   
 
+    return schema_file, output_dir
 
 def main():
 
     SCHEMA_FILE, OUTPUT_DIR = handle_args(sys.argv)
 
-    schema_lines = open(SCHEMA_FILE).readlines()
-    indent_size = validator.validate_schema(schema_lines)
-    schema = utils.clean(schema_lines)
+    schema = utils.clean( open(SCHEMA_FILE).readlines() )
+    indent_size = validator.validate_schema(schema)
 
     directory_tree = Tree(
         input=schema,
         indent_size=indent_size,
         output_dir=OUTPUT_DIR
-    )
-    directory_tree.build_tree()
+    ).build_tree()
 
     def make_line_printer(indent, indent_char=' '):
 

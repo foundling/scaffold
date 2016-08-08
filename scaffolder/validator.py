@@ -12,24 +12,18 @@ from utils import parse_indent, is_empty, is_comment, is_dir, is_multiple_of_ind
 
 class Validator():
 
-    def __init__(schema_lines):
+    def __init__(schema):
+
         self.indent = None
-        self._schema_lines = schema_lines
+        self._schema = schema
 
     def validate(self):
 
-        is_valid = True
-
-        first_indent, start_index = self.find_first_indent()
+        first_indent, start_index = self._find_first_indent()
         prev_indent = indent
-        prev_line = self._schema_lines[start_index]
-        lines = self._schema_lines[start_index + 1:]
+        prev_line = self._schema[start_index]
 
-        for index, line in enumerate(lines):
-
-            if is_empty(line) or is_comment(line):
-                prev_line = line
-                continue
+        for index, line in enumerate( self._schema[start_index + 1:] ):
 
             this_indent = parse_indent(line) 
             difference = this_indent - prev_indent
@@ -40,20 +34,22 @@ class Validator():
                 prev_indent = this_indent
                 continue
             else:
-                line_number = 1 + index + start_index
-                print 'Parsing error on line {}:\n\n{}: {}'.format(line_number, line_number, line)
-                is_valid = False
+                self.raise_parse_error(line_number=(index + start_index + 1), line=line)
 
             prev_line = line
 
-        return is_valid
+        return first_indent
 
-    def find_first_indent(self):
-        ''' returns tuple(indent_value, index in schema lines) '''
+    def raise_parse_error(self, line_number=None, line=None):
+        msg = 'A parsing error occurred on line {}.\n{}\n'.format(line_number, line)
+        raise ValueError(msg)
+
+    def _find_first_indent(self):
+        ''' returns indent_value, start_index '''
 
         indent, start_index = 0, 0 
 
-        for index, line in enumerate(self._schema_lines):
+        for index, line in enumerate(self._schema):
             if parse_indent(line) > 0:
                 indent = parse_indent(line)
                 break
