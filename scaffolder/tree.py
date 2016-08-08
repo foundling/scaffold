@@ -7,7 +7,7 @@ class Tree:
 
         self.indent_size = indent_size
         self.output_dir = output_dir
-        self.input = None
+        self.data = None
         self.root = None
 
     def build_tree(self):
@@ -30,7 +30,7 @@ class Tree:
         parent_node = virtual_root
         indent = -1
 
-        for line in self.input:
+        for line in self.data:
 
             new_indent = utils.get_indent(line, self.indent_size)
 
@@ -67,9 +67,9 @@ class Tree:
 
         _walk()
 
-    def _load_input(self, input):
+    def _load_data(self, data):
         ''' loads the input data, cleans it '''
-        this.input = utils.clean(input)
+        this.data = utils.clean(data)
 
     def _make_new_node(self, parent=None, value=None, children=None):
         ''' create a new node. if children is Nonetype, node is treated as a leaf. '''

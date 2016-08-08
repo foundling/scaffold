@@ -23,7 +23,7 @@ def main():
 
     directory_tree = Tree(
 
-        input=schema,
+        data=schema,
         indent_size=indent_size,
         output_dir=OUTPUT_DIR
 

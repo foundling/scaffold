@@ -12,7 +12,7 @@ def test_build_tree():
 def test_walk():
     assert False
 
-def test_load_input():
+def test_load_data():
     assert False
 
 def test_make_new_node():
