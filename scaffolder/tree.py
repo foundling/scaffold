@@ -49,28 +49,25 @@ class Tree:
 
         self.root = virtual_root
 
-        return self
-
     def walk(self, callback):
-        ''' The contract with Tree: args are a dict with parent, children and value properties. '''
-
-        tree = self.root
+        ''' Walk tree and call callback on each node. '''
         
-        def _walk(tree):
+        def _walk(tree, level=0):
 
             for node in tree['children']:
 
-                callback(node)
-                if node['children'] is not None:
-                    _walk(node)
+                callback(node, level=level)
 
+                if node['children'] is not None:
+                    _walk(node, level=level + 1)
+
+        tree = self.root
         _walk(tree)
 
     def load_data(self, data):
         ''' Load the input data and clean it. '''
 
         self.data = utils.clean(data)
-        return self
 
     def _make_new_node(self, parent=None, value=None, children=None):
         ''' create a new node. if children is Nonetype, node is treated as a leaf. '''

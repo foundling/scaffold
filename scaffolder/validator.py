@@ -23,9 +23,9 @@ class Validator():
             raise ValueError('The Schema file has not been loaded. Load first, then call .validate') 
 
         indent, start_index = self._find_first_indent()
+
         prev_indent = indent
         prev_line = self.schema[start_index]
-
         for index, line in enumerate( self.schema[start_index + 1:] ):
 
             this_indent = parse_indent(line) 

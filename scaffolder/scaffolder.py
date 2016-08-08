@@ -29,7 +29,9 @@ def main():
         indent_size = indent_size,
         output_dir = OUTPUT_DIR
 
-    ).load_data(schema).build_tree()
+    )
+    directory_tree.load_data(schema)
+    directory_tree.build_tree()
 
     line_printer = make_line_printer(indent_size)
     directory_tree.walk(callback=line_printer)
