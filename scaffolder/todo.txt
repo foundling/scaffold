@@ -1,3 +1,8 @@
+Ensure unicode is handled properly.
+
+Compatibility with python 3
+
+accept stdin stream.
 
 Take a directory structure and turn it into a schema file.
 
