@@ -16,15 +16,13 @@ scaffolder SCHEMA_FILE [OUTPUT_DIR]
 
 ## Rules:
 
-- Scaffolder will only create a directory structure if the schema file passes validation for consistent indentation.
+- Scaffolder creates the directory structure from the schema only if it passes validation.
 - By default, lines that end with '`/`' are treated as directories. Everything else is treated as a file. 
-- Indentation must be preceded by a directory.
 - Comments are prefixed with a '`#`'.
 - Comments and blank lines are ignored.
 - If an `OUTPUT_DIR` argument is **not** given, the schema must contain a single top-level directory.
-- If an `OUTPUT_DIR` argument is given, multiple top-level directories are allowed in the schema file.
+- If an `OUTPUT_DIR` argument is given, the schema file may contain multiple top-level directories.
 - If the `OUTPUT_DIR` already exists, it won't be overwritten. 
-- Blank lines (lines of length 0 after being stripped of whitespace) and comments (lines starting with '#' after being stripped of whitespace) are ignored.
 
 ## An Example:
 
