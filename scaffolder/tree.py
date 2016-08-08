@@ -3,11 +3,11 @@ import pdb
 
 class Tree:
 
-    def __init__(self, input, indent_size, output_dir):
+    def __init__(self, indent_size, output_dir):
 
-        self.input = input
         self.indent_size = indent_size
         self.output_dir = output_dir
+        self.input = None
         self.root = None
 
     def build_tree(self):
@@ -66,6 +66,10 @@ class Tree:
                     _walk(node)
 
         _walk()
+
+    def _load_input(self, input):
+        ''' loads the input data, cleans it '''
+        this.input = utils.clean(input)
 
     def _make_new_node(self, parent=None, value=None, children=None):
         ''' create a new node. if children is Nonetype, node is treated as a leaf. '''

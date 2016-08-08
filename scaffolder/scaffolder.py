@@ -11,7 +11,7 @@ import click
 from tree import Tree
 import utils
 import validator
-
+import walk_funcs
 
 
 ''' 
@@ -51,70 +51,24 @@ import validator
 
 '''
 
-def handle_args(args):
-
-    #
-    #  Provisional argument handling to be replaced by click.
-    #
-    #  Usage: scaffolder SCHEMA [OUTPUT_DIR]
-    #
-    
-    schema_file = None
-    output_dir = None
-
-    if len(args) < 2:
-        utils.usage()
-        sys.exit(1)
-
-    if len(args) == 2:
-        schema_file = args[1] 
-
-        dt_now = datetime.datetime.now()
-        date_string = str(dt_now) 
-        date_label = date_string.split(' ')[0]
-        output_dir = 'SCAFFOLD_OUTPUT_{}'.format(date_label)
-
-    if len(args) > 2:
-
-        if os.path.isdir(args[2]):
-            print ("An error has occurred: the output directory '{}' exists. In order to run scaffolder successfully, \n"
-            "either rename your output directory or rename the currently directory with the name you've supplied.").format(output_dir)
-            utils.usage()
-            sys.exit(1) 
-
-        else:
-            schema_file = args[1]
-            output_dir = args[2]   
-
-    return schema_file, output_dir
 
 def main():
 
-    SCHEMA_FILE, OUTPUT_DIR = handle_args(sys.argv)
+    SCHEMA_FILE, OUTPUT_DIR = utils.handle_args(sys.argv)
 
-    schema = utils.clean( open(SCHEMA_FILE).readlines() )
+    raw_lines = open(SCHEMA_FILE).readlines()
+    schema = utils.clean(raw_lines)
     indent_size = validator.validate_schema(schema)
 
     directory_tree = Tree(
+
         input=schema,
         indent_size=indent_size,
         output_dir=OUTPUT_DIR
+
     ).build_tree()
 
-    def make_line_printer(indent, indent_char=' '):
-
-        def _print_line(node):
-            ''' The contract with directory_tree: args are a dict with parent, children and value properties. '''
-
-            line = node['name']
-            if node['children'] is not None:
-                line += '/'
-
-            print (indent * indent_char) + line
-
-        return _print_line
-
-    line_printer = make_line_printer(indent_size)
+    line_printer = walk_funcs.make_line_printer(indent_size)
     directory_tree.walk(callback=line_printer)
 
 if __name__ == '__main__':

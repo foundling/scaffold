@@ -24,7 +24,7 @@ scaffolder SCHEMA_FILE [OUTPUT_DIR]
 - If an `OUTPUT_DIR` argument is given, the schema file may contain multiple top-level directories.
 - If the `OUTPUT_DIR` already exists, it won't be overwritten. 
 
-## An Example:
+## An example:
 
 ````bash
 $ cat schema.txt

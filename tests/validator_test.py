@@ -3,5 +3,7 @@ from StringIO import StringIO
 
 from scaffolder import validator
 
-def test_usage():
+@pytest.yield_fixture(autouse_True)
+def make_validator():
+    Validator = validator
     pass

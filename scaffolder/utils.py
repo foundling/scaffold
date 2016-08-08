@@ -55,3 +55,39 @@ def get_filename(line):
 
     return line.strip()
 
+def handle_args(args):
+
+    #
+    #  Provisional argument handling to be replaced by click.
+    #
+    #  Usage: scaffolder SCHEMA [OUTPUT_DIR]
+    #
+    
+    schema_file = None
+    output_dir = None
+
+    if len(args) < 2:
+        utils.usage()
+        sys.exit(1)
+
+    if len(args) == 2:
+        schema_file = args[1] 
+
+        dt_now = datetime.datetime.now()
+        date_string = str(dt_now) 
+        date_label = date_string.split(' ')[0]
+        output_dir = 'SCAFFOLD_OUTPUT_{}'.format(date_label)
+
+    if len(args) > 2:
+
+        if os.path.isdir(args[2]):
+            print ("An error has occurred: the output directory '{}' exists. In order to run scaffolder successfully, \n"
+            "either rename your output directory or rename the currently directory with the name you've supplied.").format(output_dir)
+            utils.usage()
+            sys.exit(1) 
+
+        else:
+            schema_file = args[1]
+            output_dir = args[2]   
+
+    return schema_file, output_dir
