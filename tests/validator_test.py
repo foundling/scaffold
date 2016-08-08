@@ -1,9 +1,17 @@
 import os
 from StringIO import StringIO
 
-from scaffolder import validator
+import pytest
 
-@pytest.yield_fixture(autouse_True)
-def make_validator():
-    Validator = validator
-    pass
+from scaffolder.validator import Validator
+
+
+schema = '''
+dir1/
+dir2/
+'''
+
+
+def test_val():
+    validator = Validator(schema)
+    assert validator.schema

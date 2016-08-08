@@ -12,18 +12,18 @@ from utils import parse_indent, is_empty, is_comment, is_dir, is_multiple_of_ind
 
 class Validator():
 
-    def __init__(schema):
+    def __init__(self, schema):
 
         self.indent = None
-        self._schema = schema
+        self.schema = schema
 
     def validate(self):
 
         first_indent, start_index = self._find_first_indent()
         prev_indent = indent
-        prev_line = self._schema[start_index]
+        prev_line = self.schema[start_index]
 
-        for index, line in enumerate( self._schema[start_index + 1:] ):
+        for index, line in enumerate( self.schema[start_index + 1:] ):
 
             this_indent = parse_indent(line) 
             difference = this_indent - prev_indent
@@ -49,7 +49,7 @@ class Validator():
 
         indent, start_index = 0, 0 
 
-        for index, line in enumerate(self._schema):
+        for index, line in enumerate(self.schema):
             if parse_indent(line) > 0:
                 indent = parse_indent(line)
                 break

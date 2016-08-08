@@ -1,11 +1,10 @@
 ''' 
-    walk_funcs.py 
-
-    Functions to run on each node in the tree. 
+    walk_funcs.py: functions to run on each node in the tree. 
 
 '''
+
 def make_line_printer(indent, indent_char=' '):
-    ''' make a function that prints out each node as a file or directory and indents accordingly '''
+    ''' Make a function that prints out each node as a file or directory and indents accordingly. '''
 
     def _print_line(node):
 
