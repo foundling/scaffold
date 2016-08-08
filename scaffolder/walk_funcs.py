@@ -8,7 +8,7 @@ def make_line_printer(indent, indent_char=' '):
 
     def _print_line(node):
 
-        line = node['name']
+        line = node['value']
         if node['children'] is not None:
             line += '/'
 

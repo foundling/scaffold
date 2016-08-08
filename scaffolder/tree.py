@@ -3,7 +3,7 @@ import pdb
 
 class Tree:
 
-    def __init__(self, indent_size, output_dir):
+    def __init__(self, indent_size=None, output_dir=None):
 
         self.indent_size = indent_size
         self.output_dir = output_dir
@@ -18,18 +18,15 @@ class Tree:
             value='virtual_root',
             children=[]
         )
-
         root = self._make_new_node(
             parent=virtual_root,
             value=self.output_dir, 
             children=[]
         )
-
         virtual_root['children'].append(root)
 
         parent_node = virtual_root
         indent = -1
-
         for line in self.data:
 
             new_indent = utils.get_indent(line, self.indent_size)
@@ -52,6 +49,8 @@ class Tree:
 
         self.root = virtual_root
 
+        return self
+
     def walk(self, callback):
         ''' The contract with Tree: args are a dict with parent, children and value properties. '''
 
@@ -65,11 +64,13 @@ class Tree:
                 if node['children'] is not None:
                     _walk(node)
 
-        _walk()
+        _walk(tree)
 
-    def _load_data(self, data):
-        ''' loads the input data, cleans it '''
-        this.data = utils.clean(data)
+    def load_data(self, data):
+        ''' Load the input data and clean it. '''
+
+        self.data = utils.clean(data)
+        return self
 
     def _make_new_node(self, parent=None, value=None, children=None):
         ''' create a new node. if children is Nonetype, node is treated as a leaf. '''
