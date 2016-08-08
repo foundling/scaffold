@@ -4,13 +4,16 @@ from StringIO import StringIO
 from scaffolder import utils
 
 def test_usage():
+
     out = StringIO()
     utils.usage(out=out)
     output = out.getvalue().strip()
+
     assert output == 'Usage: scaffolder SCHEMA_FILE [TARGET]'
     assert type(output) == str
 
 def test_clean():
+
     lines = [
         '\n',
         '# this is a comment\n',
@@ -22,9 +25,11 @@ def test_clean():
         'one two three',
     ]
     result = utils.clean(lines)
+
     assert result == expected_lines
 
 def test_is_empty():
+
     empty = ''
     spaces = '   '
     newline = '\n'
@@ -40,6 +45,7 @@ def test_is_empty():
     assert utils.is_empty(dir_name) is False
 
 def test_is_comment():
+
     comment = '# this is a comment'
     comment_multiple_pounds = '## this is a comment'
     dir_name = 'dir2/'
