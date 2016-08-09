@@ -1,23 +1,48 @@
 import os
 from StringIO import StringIO
 
-from scaffolder import tree
+from scaffolder.tree import Tree
+from scaffolder.utils import clean
 
 def test_tree_obj():
-    assert False
+
+    schema_file = 'good_schema.txt'
+    schema = clean(open(schema_file).readlines())
+
+    new_tree = Tree(
+        indent_size = 4,
+        output_dir = 'new_app',
+    )
+
+    new_tree.load_data(schema)
+
+    assert new_tree.data is not None
+    assert new_tree.indent_size == 4 
+    assert new_tree.output_dir == 'new_app'
 
 def test_build_tree():
-    assert False
+    schema_file = 'good_schema.txt'
+    schema = clean(open(schema_file).readlines())
+
+    new_tree = Tree(
+        indent_size = 4,
+        output_dir = 'new_app'
+    )
+    new_tree.load_data(schema)
+    new_tree.build_tree()
+
+    assert new_tree.root is not None
+
 
 def test_walk():
-    assert False
+    pass
 
 def test_load_data():
-    assert False
+    pass
 
 def test_make_new_node():
-    assert False
+    pass
 
 def test_find_ancestor():
-    assert False
+    pass
 

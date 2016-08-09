@@ -11,7 +11,6 @@ class Tree:
 
         self.indent_size = indent_size
         self.output_dir = output_dir
-        self.abs_base_path = None
         self.data = None
         self.root = None
 
@@ -56,18 +55,17 @@ class Tree:
 
     def walk(self, callback):
         ''' Walk tree and call callback on each node. '''
-        
-        def _walk(tree, path=self.abs_base_path):
+
+        def _walk(tree, cur_level, prev_level):
 
             for node in tree['children']:
-
-                callback(node, level=level)
+                callback(node, cur_level, prev_level)
 
                 if node['children'] is not None:
-                    _walk(node, path)
+                    _walk(node, cur_level + 1, cur_level)
 
         tree = self.root
-        _walk(tree)
+        _walk(tree, 1, 0)
 
     def load_data(self, data):
         ''' Load the input data and clean it. '''
