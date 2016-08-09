@@ -6,11 +6,12 @@ class Tree:
 
     def __init__(self, indent_size=None, output_dir=None):
 
+        if os.path.exists(output_dir):
+            raise IOError('The directory {} already exists'.format(self.output_dir))
+
         self.indent_size = indent_size
-        if output_dir.startswith('/'):
-            self.new_tree_root = self.output_dir.split('/')[:-1]
-        else:
-            self.new_tree_root
+        self.output_dir = output_dir
+        self.abs_base_path = None
         self.data = None
         self.root = None
 
@@ -56,14 +57,14 @@ class Tree:
     def walk(self, callback):
         ''' Walk tree and call callback on each node. '''
         
-        def _walk(tree, level=0):
+        def _walk(tree, path=self.abs_base_path):
 
             for node in tree['children']:
 
                 callback(node, level=level)
 
                 if node['children'] is not None:
-                    _walk(node, level=level + 1)
+                    _walk(node, path)
 
         tree = self.root
         _walk(tree)
@@ -72,6 +73,31 @@ class Tree:
         ''' Load the input data and clean it. '''
 
         self.data = utils.clean(data)
+
+    def _set_paths(self):
+        '''
+        ABSOLUTE:
+
+            original output_dir = /data/apps/new_app 
+
+            full_base_path = /data/apps
+            output_dir = new_app 
+
+        RELATIVE WITH MULTIPLE LEVELS:
+
+            original output_dir = apps/new_app 
+
+            full_base_path = cwd() + '/' + apps/
+            output_dir = new_app 
+
+        RELATIVE WITH A SINGLE LEVEL:
+
+            original_output_dir = new_app
+
+            full_base_path = cwd() 
+            output_dir = new_app 
+        '''
+        pass
 
     def _make_new_node(self, parent=None, value=None, children=None):
         ''' create a new node. if children is Nonetype, node is treated as a leaf. '''

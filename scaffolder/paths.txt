@@ -1,0 +1,20 @@
+ABSOLUTE:
+
+/data/apps/new_app 
+
+full_base_path = /data/apps
+output_dir = new_app
+
+RELATIVE MULTIPLE LEVELS:
+
+apps/new_app
+
+full_base_path = cwd() + '/' + apps/
+output_dir = new_app
+
+RELATIVE SINGLE LEVEL:
+
+new_app
+
+full_base_path = cwd()
+output_dir = new_app
