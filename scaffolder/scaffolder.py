@@ -15,7 +15,7 @@ from walk_funcs import make_line_printer
 
 def main():
 
-    SCHEMA_FILE, OUTPUT_DIR = utils.handle_args(sys.argv)
+    SCHEMA_FILE, OUTPUT_DIR, ABS_BASE_PATH = utils.handle_args(sys.argv)
 
     raw_lines = open(SCHEMA_FILE).readlines()
     schema = utils.clean(raw_lines)
@@ -33,10 +33,10 @@ def main():
     directory_tree.load_data(schema)
     directory_tree.build_tree()
 
-    line_printer = make_line_printer(indent_size)
-    directory_tree.walk(callback=line_printer)
+    #line_printer = make_line_printer(indent_size)
+    #directory_tree.walk(callback=line_printer)
 
-    #directory_tree.walk(callback=file_creator)
+    directory_tree.walk(callback=file_creator)
 
 if __name__ == '__main__':
     main()

@@ -74,31 +74,6 @@ class Tree:
 
         self.data = utils.clean(data)
 
-    def _set_paths(self):
-        '''
-        ABSOLUTE:
-
-            original output_dir = /data/apps/new_app 
-
-            full_base_path = /data/apps
-            output_dir = new_app 
-
-        RELATIVE WITH MULTIPLE LEVELS:
-
-            original output_dir = apps/new_app 
-
-            full_base_path = cwd() + '/' + apps/
-            output_dir = new_app 
-
-        RELATIVE WITH A SINGLE LEVEL:
-
-            original_output_dir = new_app
-
-            full_base_path = cwd() 
-            output_dir = new_app 
-        '''
-        pass
-
     def _make_new_node(self, parent=None, value=None, children=None):
         ''' create a new node. if children is Nonetype, node is treated as a leaf. '''
         return  dict(parent=parent, value=value, children=children)

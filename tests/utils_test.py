@@ -117,13 +117,18 @@ def test_get_filename():
 def test_handle_args():
 
     args = ('scaffolder', 'schema.txt')
-    schema, output_dir = utils.handle_args(args)
-
+    schema, output_dir, abs_base_path = utils.handle_args(args)
     assert type(schema) == str
-    assert output_dir.startswith('SCAFFOLDER_OUTPUT') 
+    assert output_dir.startswith('SCAFFOLDER_OUTPUT')
 
-    args = ('scaffolder', 'schema.txt', 'output_dir')
-    schema, output_dir = utils.handle_args(args)
+def test_get_paths():
+    ''' Returns tuple of (abs_base_path, output_dir). '''
 
-    assert type(schema) == str
-    assert output_dir.startswith('output_dir') 
+    abs_cur_dir = os.path.abspath(os.curdir)
+    absolute = '/data/apps/new_app'
+    relative_multiple_levels = 'apps/new_app' 
+    relative_single_level = 'new_app'
+
+    assert utils.get_paths('/data/apps/new_app') == ('new_app', '/data/apps')
+    assert utils.get_paths('apps/new_app') == ('new_app', os.path.join(abs_cur_dir, 'apps'))
+    assert utils.get_paths('new_app') == ('new_app', abs_cur_dir) 

@@ -69,6 +69,7 @@ def handle_args(args):
     
     schema_file = None
     output_dir = None
+    abs_base_path = None
 
     if len(args) < 2:
         usage()
@@ -81,6 +82,7 @@ def handle_args(args):
         date_string = str(dt_now) 
         date_label = date_string.split(' ')[0]
         output_dir = 'SCAFFOLDER_OUTPUT_{}'.format(date_label)
+        output_dir, abs_base_path = get_paths(output_dir)
 
     if len(args) > 2:
 
@@ -92,6 +94,51 @@ def handle_args(args):
 
         else:
             schema_file = args[1]
-            output_dir = args[2]   
+            output_dir = args[2]
+            output_dir, abs_base_path = get_paths(output_dir)
 
-    return schema_file, output_dir
+    return schema_file, output_dir, abs_base_path
+
+def get_paths(output_dir):
+    ''' Takes the output directory and breaks it into the relative directory name and the base path/starting point for the traversal 
+
+    ABSOLUTE:
+
+        original output_dir = /data/apps/new_app 
+
+        output_dir = new_app 
+        full_base_path = /data/apps
+
+    RELATIVE WITH MULTIPLE LEVELS:
+
+        original output_dir = apps/new_app 
+
+        output_dir = new_app 
+        full_base_path = cwd() + '/' + apps/
+
+    RELATIVE WITH A SINGLE LEVEL:
+
+        original_output_dir = new_app
+
+        output_dir = new_app 
+        full_base_path = cwd() 
+
+    '''
+
+    abs_cur_dir = os.path.abspath(os.curdir)
+    full_base_path = None
+
+    # absolute path example: /data/apps/new_app
+    if output_dir.startswith('/'):
+        abs_base_path = os.path.join('/', *output_dir.split('/')[:-1])
+        output_dir = output_dir.split('/')[-1]
+
+    # relative path with multiple dirs example: apps/new_app 
+    else:
+        if '/' in output_dir:
+            abs_base_path = os.path.join( abs_cur_dir, '/'.join(output_dir.split('/')[:-1]) )
+            output_dir = output_dir.split('/')[-1]
+        else:
+            abs_base_path = abs_cur_dir 
+
+    return output_dir, abs_base_path
