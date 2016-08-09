@@ -18,8 +18,9 @@ def main():
 
     SCHEMA_FILE, OUTPUT_DIR, ABS_BASE_PATH = utils.handle_args(sys.argv)
 
-    raw_lines = open(SCHEMA_FILE).readlines()
-    schema = utils.clean(raw_lines)
+    with open(SCHEMA_FILE) as fh:
+        raw_lines = fh.readlines()
+        schema = utils.clean(raw_lines)
 
     validator = Validator()
     validator.load_schema(schema)
