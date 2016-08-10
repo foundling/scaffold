@@ -56,16 +56,20 @@ class Tree:
     def walk(self, callback):
         ''' Walk tree and call callback on each node. '''
 
-        def _walk(tree, cur_level, prev_level):
 
-            for node in tree['children']:
-                callback(node, cur_level, prev_level)
+        def _walk(tree, path):
+            children = tree['children']
+            for child in children:
 
-                if node['children'] is not None:
-                    _walk(node, cur_level + 1, cur_level)
+                print os.path.join(path, child['value'])
 
+                if child['children'] is not None:
+                    _walk(child, os.path.join(path, child['value']))
+
+
+        base_path = os.path.abspath(os.curdir)
         tree = self.root
-        _walk(tree, 1, 0)
+        _walk(tree, base_path)
 
     def load_data(self, data):
         ''' Load the input data and clean it. '''
