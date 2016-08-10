@@ -1,22 +1,26 @@
 # Contributing to Superdir
 
+Superdir is a tiny Python application, but nonetheless, contributions are encouraged, appreciated and welcome! Thanks for even considering the idea!
+
 ## Reporting issues
 
-- Please make sure to specify your version of Python and the OS when reporting an issue.
-- Please make sure to read through the GitHub issues for `superdir` before you post an issue.
+If you find an issue, please ...
+
+- Make sure to search through the [superdir issue tracker](https://github.com/foundling/superdir/issues) first.
+- Specify your version of Python and Operating System when reporting an issue.
 
 ## Submitting patches
 
-- Explain the solution your patch offers.
-- Include tests that clearly demonstrate application 1) failing and 2) the patch resolving this failure.
-- Code style and clarity is paramount. Please adhere to `PEP8 <http://legacy.python.org/dev/peps/pep-0008/>` where it makes sense when submitting a patch.
+When submitting patches, please ...
 
-# Running Tests
+- Clearly explain the condition(s) under which Superdir fails and the solution that your patch offers.
+- Include tests that clearly show the application 1) failing and 2) the patch resolving this failure.
+- Adhere to `PEP8 <http://legacy.python.org/dev/peps/pep-0008/>` where it makes sense.
 
-- You probably want to install `virtualenv` for your test environment.
-- The only requirement for developing Superdir is `py.test`. 
+## Setting up your development environment and running the tests
 
-Install Superdir as an editable package using the current source::
+- You may want to install [virtualenv](https://virtualenv.pypa.io/en/stable/) to host your test environment.
+- The only requirement for hacking on Superdir is `py.test`. 
 
 ````bash
     # clone the superdir repo
