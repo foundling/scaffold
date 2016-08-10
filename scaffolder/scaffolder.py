@@ -12,7 +12,7 @@ from tree import Tree
 import utils
 from validator import Validator
 from walk_funcs import make_line_printer
-from walk_funcs import make_file_creator
+from walk_funcs import create_file
 
 def main():
 
@@ -35,8 +35,7 @@ def main():
     directory_tree.load_data(schema)
     directory_tree.build_tree()
 
-    file_creator = make_file_creator(ABS_BASE_PATH)
-    directory_tree.walk(callback=file_creator)
+    directory_tree.walk(callback=create_file)
 
 if __name__ == '__main__':
     main()

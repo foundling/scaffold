@@ -56,12 +56,12 @@ class Tree:
     def walk(self, callback):
         ''' Walk tree and call callback on each node. '''
 
-
         def _walk(tree, path):
-            children = tree['children']
-            for child in children:
 
-                print os.path.join(path, child['value'])
+            children = tree['children']
+
+            for child in children:
+                callback(path, child)
 
                 if child['children'] is not None:
                     _walk(child, os.path.join(path, child['value']))
