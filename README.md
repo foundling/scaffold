@@ -14,7 +14,12 @@ pip install Superdir
 superdir SCHEMA_FILE [OUTPUT_DIR]
 ````
 
-## Rules:
+## Contributing
+
+See here for the [contributors guide](https://github.com/foundling/superdir/blob/master/CONTRIBUTING.md). 
+
+
+## Parsing Rules:
 
 - `superdir` creates the directory structure from the schema only if it passes validation.
 - By default, lines that end with '`/`' are treated as directories. Everything else is treated as a file. 
@@ -24,7 +29,7 @@ superdir SCHEMA_FILE [OUTPUT_DIR]
 - If an `OUTPUT_DIR` argument is given, the schema file may contain multiple top-level directories.
 - If the `OUTPUT_DIR` already exists, it won't be overwritten. 
 
-## An example:
+## Superdir in action!
 
 ````bash
 $ cat schema.txt
@@ -45,10 +50,6 @@ superdir/
     test/
 
 $ superdir schema.txt new_project 
-````
-This gets turned into a directory tree rooted at `new_project` within your current directory. 
-
-````
 $ tree
 new_project
 └── superdir/
@@ -64,4 +65,3 @@ new_project
     └── README.md
     └── LICENSE.md
 ````
-
