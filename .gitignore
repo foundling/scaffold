@@ -8,3 +8,7 @@ __pycache__
 .*
 !/.gitignore
 scaffolder.egg-info
+dist/**/*
+dist
+superdir.egg-info/**/*
+superdir.egg-info/

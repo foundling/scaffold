@@ -8,10 +8,11 @@ setup(
     name = "superdir",
     author = 'Alex Ramsdell',
     author_email = 'alexramsdell@gmail.com',
-    version = "0.1.0",
+    version = "0.1.1",
     url = 'http://github.com/foundling/superdir',
     license = 'MIT',
     description = 'Turn that text file into a file tree!',
+    keywords = 'cli productivity',
     packages = ['superdir'],
     long_description = read('README.md'),
     install_requires = [
@@ -27,5 +28,4 @@ setup(
         [console_scripts]
         superdir=superdir:main
     '''
-    ]
 )
