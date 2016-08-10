@@ -8,7 +8,7 @@ setup(
     name = "superdir",
     author = 'Alex Ramsdell',
     author_email = 'alexramsdell@gmail.com',
-    version = "0.1.1",
+    version = "0.1.2",
     url = 'http://github.com/foundling/superdir',
     license = 'MIT',
     description = 'Turn that text file into a file tree!',
