@@ -1,6 +1,7 @@
 plan.txt
 output
 env
+.pypirc
 __pycache__
 *.pyc
 *.sw[op]
