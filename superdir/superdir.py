@@ -6,8 +6,6 @@ import datetime
 import os
 import sys
 
-import click
-
 from tree import Tree
 import utils
 from validator import Validator

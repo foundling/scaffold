@@ -30,16 +30,16 @@ class Tree:
         virtual_root['children'].append(root)
 
         parent_node = virtual_root
-        indent = -1
+        prev_indent = -1
         for line in self.data:
 
-            new_indent = utils.get_indent(line, self.indent_size)
+            cur_indent = utils.get_indent(line, self.indent_size)
 
-            if new_indent > indent:
+            if cur_indent > prev_indent:
                 parent_node = parent_node['children'][-1]
 
-            elif new_indent < indent:
-                distance = indent - new_indent
+            elif cur_indent < prev_indent:
+                distance = prev_indent - cur_indent
                 parent_node = self._find_ancestor(parent_node, distance)
 
             child = self._make_new_node(
@@ -47,9 +47,8 @@ class Tree:
                 value    = utils.get_dirname(line) if utils.is_dir(line) else utils.get_filename(line), 
                 children = [] if utils.is_dir(line) else None
             ) 
-
             parent_node['children'].append(child)
-            indent = new_indent
+            prev_indent = cur_indent
 
         self.root = virtual_root
 
