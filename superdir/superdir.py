@@ -17,6 +17,7 @@ from walk_funcs import create_file
 def main():
 
     SCHEMA_FILE, OUTPUT_DIR, ABS_BASE_PATH = utils.handle_args(sys.argv)
+    indent_size = None
 
     with open(SCHEMA_FILE) as fh:
         raw_lines = fh.readlines()
@@ -24,7 +25,8 @@ def main():
 
     validator = Validator()
     validator.load_schema(schema)
-    indent_size = validator.validate()
+    validator.validate()
+    indent_size = validator.get_indent_size()
 
     directory_tree = Tree(
 

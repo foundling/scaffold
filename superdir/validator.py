@@ -16,11 +16,9 @@ class Validator():
 
         self.indent = None
         self.schema = None
+        self.indent_size = None
 
     def validate(self):
-
-        if self.schema is None:
-            raise ValueError('The Schema file has not been loaded. Load first, then call .validate') 
 
         indent, start_index = self._find_first_indent()
 
@@ -41,14 +39,15 @@ class Validator():
 
             prev_line = line
 
-        return indent
-
-    def raise_parse_error(self, line_number=None, line=None):
-        msg = 'A parsing error occurred on line {}.\n{}\n'.format(line_number, line)
-        raise ValueError(msg)
+        self.indent_size = indent
 
     def load_schema(self, schema):
+
         self.schema = clean(schema)
+
+    def get_indent_size(self):
+
+        return self.indent_size
 
     def _find_first_indent(self):
         ''' returns indent_value, start_index '''
