@@ -5,11 +5,11 @@ import sys
 
 
 '''  
-    Utility functions for scaffolder.py.  
+    Utility functions for superdir.py.  
 '''
 
 def usage(out=sys.stdout):
-    out.write('Usage: scaffolder SCHEMA_FILE [TARGET]\n')
+    out.write('Usage: superdir SCHEMA_FILE [TARGET]\n')
 
 def clean(lines):
     return [ line.rstrip() for line in lines if not is_empty(line) and not is_comment(line) ] 
@@ -64,8 +64,10 @@ def handle_args(args):
     #
     #  Provisional argument handling to be replaced by click.
     #
-    #  Usage: scaffolder SCHEMA [OUTPUT_DIR]
+    #  Usage: superdir SCHEMA [OUTPUT_DIR]
     #
+
+    # Check for stdin pipe here
     
     schema_file = None
     output_dir = None
@@ -81,13 +83,13 @@ def handle_args(args):
         dt_now = datetime.datetime.now()
         date_string = str(dt_now) 
         date_label = date_string.split(' ')[0]
-        output_dir = 'SCAFFOLDER_OUTPUT_{}'.format(date_label)
+        output_dir = 'SUPERDIR_OUTPUT_{}'.format(date_label)
         output_dir, abs_base_path = get_paths(output_dir)
 
     if len(args) > 2:
 
         if os.path.isdir(args[2]):
-            print ("An error has occurred: the output directory '{}' exists. In order to run scaffolder successfully, \n"
+            print ("An error has occurred: the output directory '{}' exists. In order to run superdir successfully, \n"
             "either rename your output directory or rename the currently directory with the name you've supplied.").format(output_dir)
             usage()
             sys.exit(1) 

@@ -1,17 +1,17 @@
 # Scaffolder
 
-Scaffolder is a command-line tool for Linux, BSD, and OSX that generates a directory tree from a reasonable, consistently-indented flat file representation.
+Superdir is a command-line tool for Linux, BSD, and OSX that generates a directory tree from a reasonable, consistently-indented flat file representation.
 
 ## Installation:
 
 ````bash
-pip install Scaffolder
+pip install Superdir
 ````
 
 ## Usage:
 
 ````bash
-scaffolder SCHEMA_FILE [OUTPUT_DIR]
+superdir SCHEMA_FILE [OUTPUT_DIR]
 ````
 
 ## Rules:
@@ -30,35 +30,35 @@ scaffolder SCHEMA_FILE [OUTPUT_DIR]
 $ cat schema.txt
 
 # Flat-file example of a directory structure
-scaffolder/
+superdir/
     docs/
-    scaffolder/
-        scaffolder.py
+    superdir/
+        superdir.py
         validator.py
         tree.py
     test/
-        scaffolder_test.py
+        superdir_test.py
         validator_test.py
         tree_test.py
     README.md
     LICENSE.md
     test/
 
-$ scaffolder schema.txt new_project 
+$ superdir schema.txt new_project 
 ````
 This gets turned into a directory tree rooted at `new_project` within your current directory. 
 
 ````
 $ tree
 new_project
-└── scaffolder/
+└── superdir/
     └── docs/
-    └── scaffolder/
-        └── scaffolder.py
+    └── superdir/
+        └── superdir.py
         └── validator.py
         └── tree.py
     └── test/
-        └── scaffolder_test.py
+        └── superdir_test.py
         └── validator_test.py
         └── tree_test.py
     └── README.md

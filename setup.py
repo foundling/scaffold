@@ -1,14 +1,14 @@
 from setuptools import setup
 
 setup(
-    name = "scaffolder",
+    name = "superdir",
     version = "1.0",
-    py_modules = ['scaffolder'],
+    py_modules = ['superdir'],
     install_requires = [
-        'scaffolder'
+        'superdir'
     ],
     entry_points = '''
         [console_scripts]
-        scaffolder=scaffolder:main
+        superdir=superdir:main
     '''
 )
