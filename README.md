@@ -1,5 +1,5 @@
 ![superdir_header](https://github.com/foundling/superdir/blob/master/superdir_logo.png)
-Superdir is a command-line tool for Linux, BSD, and OSX that generates a directory tree from a reasonable, consistently-indented flat file representation.  It is MIT-licensed.
+`superdir` is a command-line tool for Linux, BSD, and OSX that generates a directory tree from a reasonable, consistently-indented flat file representation.  It is MIT-licensed.
 
 ## Installation:
 
