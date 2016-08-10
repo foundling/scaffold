@@ -1,4 +1,4 @@
-# Scaffolder
+# Superdir
 
 Superdir is a command-line tool for Linux, BSD, and OSX that generates a directory tree from a reasonable, consistently-indented flat file representation.
 
@@ -16,7 +16,7 @@ superdir SCHEMA_FILE [OUTPUT_DIR]
 
 ## Rules:
 
-- Scaffolder creates the directory structure from the schema only if it passes validation.
+- `superdir` creates the directory structure from the schema only if it passes validation.
 - By default, lines that end with '`/`' are treated as directories. Everything else is treated as a file. 
 - Comments are prefixed with a '`#`'.
 - Comments and blank lines are ignored.
