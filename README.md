@@ -21,7 +21,7 @@ See here for the [contributors guide](https://github.com/foundling/superdir/blob
 
 ## Motivation:
 
-Between learning to build new things and writing about how to build things, I inevitably end up creating a lot of temporary directory structures.  `superdir` is a distraction-free way to generate these temporary structures without having to dive into code, much less debug that code.  All you need is a schema file that you can generate yourself or copy from a tutorial you're following along with. Pipe it to `superdir` or pass it as an argument, and off you go.
+Between learning to build new things and writing about how to build things, I inevitably end up creating a lot of temporary directory structures.  `superdir` is a distraction-free way to generate these temporary structures without code.  All you need is a schema file that you can generate yourself or copy from a tutorial you're following along with. Pipe it to `superdir` or pass it as an argument, and off you go.
 
 ## Behavior:
 
