@@ -38,11 +38,12 @@ See here for the [contributors guide](https://github.com/foundling/superdir/blob
 
 ## Hooks:
 
-Hooks will let you write the content of a matching template to all matching filenames in your schema file. To take advantage of hooks, create a `.superdirrc` file in your home directory. Add an equals-separated key-value pair for each template file you want, where the key is the filename and the value is the template file's location on your system. Here's an example:
+Hooks will let you write the content of a template file to all matching filenames in your schema file. To take advantage of hooks, create a `.superdirrc` file in your home directory. Add an equals-separated key-value pair for each template file you want, where the key is the filename and the value is the template file's location on your system. Here's an example:
 
 ````bash
 # config file in $HOME/.superdirrc 
 
+# pattern to match from schema -> template location 
 index.html = ~/apps/lib/html/index.html
 styles.css = ~/apps/lib/css/styles.css
 
