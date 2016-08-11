@@ -25,15 +25,13 @@ Between learning to build new things and writing about how to build things, I in
 
 ## Behavior:
 
-- `superdir` uses the level of indentation in your flat-file representation to create a file hierarchy at the output directory.
-- If no output directory is specified, a generic one is created with the date appended.
+- `superdir` will not overwrite any existing files or directories.
 - `superdir` creates the directory structure from the schema only if it passes validation.
 - By default, lines that end with '`/`' are treated as directories. Everything else is treated as a file. 
 - Comments should be prefixed by '`#`'.
 - Comments and blank lines are ignored.
-- If an `OUTPUT_DIR` argument is **not** given, the schema must contain a single top-level directory.
+- If no `OUTPUT_DIR` argument is given, the schema must contain a single top-level directory.
 - If an `OUTPUT_DIR` argument is given, the schema file may contain multiple top-level directories.
-- If the `OUTPUT_DIR` already exists, it won't be overwritten. 
 
 ## superdir in action!
 
