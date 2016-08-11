@@ -19,8 +19,14 @@ superdir SCHEMA_FILE [OUTPUT_DIR]
 See here for the [contributors guide](https://github.com/foundling/superdir/blob/master/CONTRIBUTING.md). 
 
 
+## Motivation:
+
+Between learning to build new things and writing about how to build things, I inevitably end up creating a lot of temporary directory structures.  `superdir` is a quick and visually intuitive way to generate these temporary structures without having to dive into code, much less debug that code.  Just copy a file structure that you find in a tutorial, put it in a file, pipe it to `superdir`, and off you go.
+
 ## Behavior:
 
+- `superdir` uses the level of indentation in your flat-file representation to create a file hierarchy at the output directory.
+- If no output directory is specified, a generic one is created with the date appended.
 - `superdir` creates the directory structure from the schema only if it passes validation.
 - By default, lines that end with '`/`' are treated as directories. Everything else is treated as a file. 
 - Comments should be prefixed by '`#`'.
