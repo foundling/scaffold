@@ -12,3 +12,5 @@ dist/**/*
 dist
 superdir.egg-info/**/*
 superdir.egg-info/
+pypi_steps.txt
+build
