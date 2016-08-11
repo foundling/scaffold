@@ -43,6 +43,8 @@ index.html = ~/apps/lib/html/index.html
 styles.css = ~/apps/lib/css/styles.css
 ````
 
+In the process of building the tree, if `superdir` comes across a matching file key, it will write the corresponding content from the file into the file tree's resulting file.
+
 ## superdir in action!
 
 ````bash
