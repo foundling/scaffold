@@ -1,0 +1,4 @@
+#!/usr/bin/env python 
+
+from superdir import superdir
+superdir.main()

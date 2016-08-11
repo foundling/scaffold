@@ -8,12 +8,13 @@ setup(
     name = "superdir",
     author = 'Alex Ramsdell',
     author_email = 'alexramsdell@gmail.com',
-    version = "0.1.2",
+    version = "0.1.3",
     url = 'http://github.com/foundling/superdir',
     license = 'MIT',
     description = 'Turn that text file into a file tree!',
     keywords = 'cli productivity',
     packages = ['superdir'],
+    scripts = ['bin/superdir'],
     long_description = read('README.md'),
     install_requires = [
         'superdir'
@@ -24,9 +25,4 @@ setup(
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
     ],
-    entry_points = {
-        'console_scripts': [
-            'superdir=superdir:main'
-        ]
-    }
 )
