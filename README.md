@@ -12,6 +12,7 @@ pip install superdir
 
 ````bash
 superdir SCHEMA_FILE [OUTPUT_DIR]
+cat SCHEMA_FILE | superdir [OUTPUT_DIR]
 ````
 
 ## Contributing
@@ -21,7 +22,7 @@ See here for the [contributors guide](https://github.com/foundling/superdir/blob
 
 ## Motivation:
 
-Between learning to build new things and writing about how to build things, I inevitably end up creating a lot of temporary directory structures.  `superdir` is a distraction-free way to generate these temporary structures without code.  All you need is a schema file that you can generate yourself or copy from a tutorial you're following along with. Pipe it to `superdir` or pass it as an argument, and off you go.
+`superdir` is a simple and quick way to generate a directory structure without code.  All you need is a schema file that you can generate yourself or copy from a tutorial you're following along with. Pipe it to `superdir` or pass it as an argument, and off you go.
 
 ## Behavior:
 
@@ -32,6 +33,15 @@ Between learning to build new things and writing about how to build things, I in
 - Comments and blank lines are ignored.
 - If no `OUTPUT_DIR` argument is given, the schema must contain a single top-level directory.
 - If an `OUTPUT_DIR` argument is given, the schema file may contain multiple top-level directories.
+
+## Hooks:
+
+`superdir` will write previously existing template files to the location specified in your schema file if you create a `.superdirrc` file in your home directory that contains the name of the file to look for (the hook) and its location on your system. Here's an example.
+
+````bash
+index.html = ~/apps/lib/html/index.html
+styles.css = ~/apps/lib/css/styles.css
+````
 
 ## superdir in action!
 
