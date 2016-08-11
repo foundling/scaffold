@@ -11,8 +11,8 @@ pip install superdir
 ## Usage:
 
 ````bash
-superdir SCHEMA_FILE [OUTPUT_DIR]
-cat SCHEMA_FILE | superdir [OUTPUT_DIR]
+$ superdir SCHEMA_FILE [OUTPUT_DIR]
+$ cat SCHEMA_FILE | superdir [OUTPUT_DIR]
 ````
 
 ## Contributing
