@@ -1,18 +1,26 @@
+'''  
+    Utility functions for superdir.py.  
+'''
+
 import datetime
 
 import os
 import sys
 
 
-'''  
-    Utility functions for superdir.py.  
-'''
-
 def usage(out=sys.stdout):
+    ''' Print usage info. '''
+
     out.write('Usage: superdir SCHEMA_FILE [TARGET]\n')
 
 def clean(lines):
-    return [ line.rstrip() for line in lines if not is_empty(line) and not is_comment(line) ] 
+    ''' discard all comments and lines with nothing or whitespace ''' 
+
+    return [ line.rstrip() 
+            for line in lines 
+            if not (is_empty(line)
+            or
+            is_comment(line)) ] 
 
 def is_empty(line):
     return line.strip() is ''
@@ -61,18 +69,9 @@ def get_filename(line):
 
 def handle_args(args):
 
-    #
-    #  Provisional argument handling to be replaced by click.
-    #
-    #  Usage: superdir SCHEMA [OUTPUT_DIR]
-    #
+    schema_file, output_dir, abs_base_path = None, None, None
 
-    # Check for stdin pipe here
-    
-    schema_file = None
-    output_dir = None
-    abs_base_path = None
-
+    # stdin is a terminal, not a pipe 
     if len(args) < 2:
         usage()
         sys.exit(1)
@@ -98,6 +97,7 @@ def handle_args(args):
             schema_file = args[1]
             output_dir = args[2]
             output_dir, abs_base_path = get_paths(output_dir)
+
 
     return schema_file, output_dir, abs_base_path
 
