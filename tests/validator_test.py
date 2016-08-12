@@ -1,10 +1,10 @@
+
 import os
 from StringIO import StringIO
 
 import pytest
 
 from superdir.validator import Validator
-
 
 def test_load_valid_schema():
 
@@ -13,11 +13,12 @@ def test_load_valid_schema():
     dir2/
         dir3/
             dir4/
-    '''
+    '''.split('\n')
 
     validator = Validator()
     validator.load_schema(schema)
 
+    assert type(schema) == list
     assert validator.schema is not None
     assert len(validator.schema) > 0
     assert type(validator.schema) == list
