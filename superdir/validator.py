@@ -29,18 +29,20 @@ class Validator():
 
             this_indent = parse_indent(line) 
             difference = this_indent - prev_indent
+            valid_line = ( (difference == 0) or\
+                           (difference == indent and is_dir(prev_line)) or\
+                           (difference < 0 and is_multiple_of_indent(this_indent, indent)) ) 
 
-            if (difference == 0) or\
-               (difference == indent and is_dir(prev_line)) or\
-               (difference < 0 and is_multiple_of_indent(this_indent, indent)):
+            if not valid_line:
+                show_err_msg(
+                    line_number = (index + start_index + 1),
+                    schema_lines = self.schema[:]
+                )
+                raise SystemExit(1) 
 
-                prev_indent = this_indent
-                prev_line = line
-
-                continue
-
-            show_err_msg(line_number=(index + start_index + 1), schema_lines=self.schema[:])
-            raise SystemExit(1) 
+            prev_indent = this_indent
+            prev_line = line
+            continue
 
 
         self.indent_size = indent

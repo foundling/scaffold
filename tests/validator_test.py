@@ -48,22 +48,15 @@ def test_validate_success():
 
 def test_validate_failure():
 
-    bad_schema = ''' 
-    app/
-                   app/
-
-            app.py
-            lib.py
-    # Comment
-
-        docs/
-        tests/
-            app_test.py
-            lib_test.py
-    etc/
-    '''
+    bad_schema = '''
+    dir1/ 
+        dir2/
+               dir3/
+    '''.split('\n')
 
     validator = Validator()
     validator.load_schema(bad_schema)
+    with pytest.raises(SystemExit):
+        validator.validate()
 
-    assert validator.validate() is None
+
