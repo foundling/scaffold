@@ -7,21 +7,6 @@ import datetime
 import os
 import sys
 
-
-def usage(out=sys.stdout):
-    ''' Print usage info. '''
-
-    out.write('Usage: superdir SCHEMA_FILE [TARGET]\n')
-
-def clean(lines):
-    ''' discard all comments and lines with nothing or whitespace ''' 
-
-    return [ line.rstrip() 
-            for line in lines 
-            if not (is_empty(line)
-            or
-            is_comment(line)) ] 
-
 def is_empty(line):
     return line.strip() is ''
 
@@ -38,6 +23,15 @@ def is_multiple_of_indent(this_indent, global_indent):
         this_indent -= global_indent
 
     return this_indent == 0
+
+def clean(lines):
+    ''' discard all comments and lines with nothing or whitespace ''' 
+
+    return [ 
+            line.rstrip() 
+            for line in lines 
+            if not is_empty(line)
+            and is_comment(line) ] 
 
 def parse_indent(line):
     ''' Return the leading number of spaces in a line of text. '''
@@ -66,40 +60,6 @@ def get_filename(line):
     ''' return line with whitespace stripped. '''
 
     return line.strip()
-
-def handle_args(args):
-
-    schema_file, output_dir, abs_base_path = None, None, None
-
-    # stdin is a terminal, not a pipe 
-    if len(args) < 2:
-        usage()
-        sys.exit(1)
-
-    if len(args) == 2:
-        schema_file = args[1] 
-
-        dt_now = datetime.datetime.now()
-        date_string = str(dt_now) 
-        date_label = date_string.split(' ')[0]
-        output_dir = 'SUPERDIR_OUTPUT_{}'.format(date_label)
-        output_dir, abs_base_path = get_paths(output_dir)
-
-    if len(args) > 2:
-
-        if os.path.isdir(args[2]):
-            print ("An error has occurred: the output directory '{}' exists. In order to run superdir successfully, \n"
-            "either rename your output directory or rename the currently directory with the name you've supplied.").format(output_dir)
-            usage()
-            sys.exit(1) 
-
-        else:
-            schema_file = args[1]
-            output_dir = args[2]
-            output_dir, abs_base_path = get_paths(output_dir)
-
-
-    return schema_file, output_dir, abs_base_path
 
 def get_paths(output_dir):
     ''' Takes the output directory and breaks it into the relative directory name and the base path/starting point for the traversal 
@@ -144,3 +104,9 @@ def get_paths(output_dir):
             abs_base_path = abs_cur_dir 
 
     return output_dir, abs_base_path
+
+def usage(out=sys.stdout):
+    ''' Print usage info. '''
+
+    out.write('Usage: superdir SCHEMA_FILE [TARGET]\n')
+

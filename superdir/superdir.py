@@ -9,13 +9,14 @@ import sys
 from tree import Tree
 import utils
 from validator import Validator
+from arg_handler import arg_handler 
+
 
 def main():
 
     BASE_PATH = os.path.abspath(os.curdir)
-    SCHEMA_FILE, OUTPUT_DIR, ABS_BASE_PATH = utils.handle_args(sys.argv)
+    SCHEMA_FILE, OUTPUT_DIR = args.handle_args(sys.argv)
     indent_size = None
-
 
     with open(SCHEMA_FILE) as fh:
         raw_lines = fh.readlines()

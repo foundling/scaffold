@@ -1,3 +1,4 @@
+clean/**/*
 plan.txt
 output
 env

@@ -1,3 +1,11 @@
+immediate
+-- 
+
+fix command line situation, using click.
+
+
+--
+
 Ensure unicode is handled properly.
 
 build each node's abs path in build_tree func
