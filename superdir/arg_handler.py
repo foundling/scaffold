@@ -9,6 +9,7 @@ def get_now():
     return date_label
 
 def handle_args(args):
+    ''' Args does not include the filename from sys.argv[0] '''
 
     output_dir = None
     schema = None
@@ -16,7 +17,7 @@ def handle_args(args):
 
     if sys.stdin.isatty():
 
-        schema = [ line for line in sys.stdin ]
+        # cat schema.txt | superdir [ new_app ]
 
         if len(args) == 0:
             output_dir = date_stamp 
@@ -27,12 +28,12 @@ def handle_args(args):
         else: 
             usage()
 
+        schema = list(sys.stdin)
+
     else:
 
-        schema = None
-        with open(schema) as fh:
-            schema = [ line for line in fh ]
-        
+        # superdir schema.txt [ new_app ]
+
         if len(args) == 1:
             output_dir = date_stamp 
 
@@ -42,4 +43,7 @@ def handle_args(args):
         else:
             usage()
 
+        with open(args[0]) as fh:
+            schema = [ line for line in fh ]
+        
     return schema, output_dir
