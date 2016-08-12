@@ -12,10 +12,10 @@ pip install superdir
 
 ````bash
 
-# regular tty use requires two arguments: an existing schema filename, and a non-existent directory name
+# you can pass arguments to superdir on the command line
 $ superdir schema_file [ output_dir ]
 
-# you can also pipe the schema into superdir via STDIN
+# or you can pipe the schema file into superdir's STDIN
 $ cat schema_file | superdir [ output_dir ]
 
 ````
