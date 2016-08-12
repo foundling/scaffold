@@ -12,7 +12,10 @@ pip install superdir
 
 ````bash
 
+# you can pass a filename (that exists) and a directory name (that you want to create) 
 $ superdir schema_file [ output_dir ]
+
+# or you can pipe the schema into superdir via STDIN
 $ cat schema_file | superdir [ output_dir ]
 
 ````
