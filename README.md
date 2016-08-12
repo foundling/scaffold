@@ -12,11 +12,15 @@ pip install superdir
 
 ````bash
 
-# you can pass arguments to superdir on the command line
-$ superdir schema_file [ output_dir ]
+$ superdir schema.txt 
 
-# or you can pipe the schema file into superdir's STDIN
-$ cat schema_file | superdir [ output_dir ]
+$ superdir schema.txt -o new_app 
+
+# read from stdin
+$ superdir schema.txt -- 
+
+# pipe data in
+$ cat schema.txt | superdir -o new_app
 
 ````
 
@@ -31,13 +35,12 @@ See here for the [contributors guide](https://github.com/foundling/superdir/blob
 
 ## Behavior:
 
-- `superdir` will not overwrite any existing files or directories.
-- `superdir` creates the directory structure from the schema only if it passes validation.
+- `superdir` will not overwrite any existing files or directories and creates the directory structure from your schema only if it passes validation.
 - By default, lines that end with '`/`' are treated as directories. Everything else is treated as a file. 
 - Comments should be prefixed by '`#`'.
 - Comments and blank lines are ignored.
-- If no `OUTPUT_DIR` argument is given, the schema must contain a single top-level directory.
-- If an `OUTPUT_DIR` argument is given, the schema file may contain multiple top-level directories.
+- If no `OUTPUT_DIR` option is given, the schema must contain exactly one top-level directory.
+- If an `OUTPUT_DIR` option is given, the schema file may contain one or more top-level directories and or files.
 
 ## Hooks:
 
