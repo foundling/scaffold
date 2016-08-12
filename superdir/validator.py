@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+
+from __future__ import print_function 
 import sys
 from utils import parse_indent, is_empty, is_comment, is_dir, is_multiple_of_indent, clean, show_err_msg
 

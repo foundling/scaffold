@@ -1,4 +1,3 @@
-
 import os
 from StringIO import StringIO
 
@@ -62,5 +61,3 @@ def test_validate_failure():
     assert type(bad_schema) == list 
     with pytest.raises(SystemExit):
         validator.validate()
-
-

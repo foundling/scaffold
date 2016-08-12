@@ -1,7 +1,10 @@
+# -*- coding: utf-8 -*-
+
 '''  
     Utility functions for superdir.py.  
 '''
 
+from __future__ import print_function 
 import datetime
 
 import os
