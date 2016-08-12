@@ -30,8 +30,7 @@ def clean(lines):
     return [ 
             line.rstrip() 
             for line in lines 
-            if not is_empty(line)
-            and is_comment(line) ] 
+            if not ( is_empty(line) or is_comment(line) ) ]
 
 def parse_indent(line):
     ''' Return the leading number of spaces in a line of text. '''
@@ -110,3 +109,9 @@ def usage(out=sys.stdout):
 
     out.write('Usage: superdir SCHEMA_FILE [TARGET]\n')
 
+def show_err_msg(out=sys.stdout, line_number=None, schema_lines=None):
+    ''' Print an error message including the line number and the line. ''' 
+
+    schema_lines[line_number] = schema_lines[line_number].rstrip() + '    <<< error'
+    highlighted_schema = '\n'.join(schema_lines)
+    out.write('Parse Error: inconsistent indentation in your schema file on line {}\n{}\n'.format(line_number, highlighted_schema))

@@ -1,7 +1,7 @@
 import os
 from StringIO import StringIO
 
-from scaffolder import utils
+from superdir import utils, args_handler
 
 def test_usage():
 
@@ -9,7 +9,7 @@ def test_usage():
     utils.usage(out=out)
     output = out.getvalue().strip()
 
-    assert output == 'Usage: scaffolder SCHEMA_FILE [TARGET]'
+    assert output == 'Usage: superdir SCHEMA_FILE [TARGET]'
     assert type(output) == str
 
 def test_clean():
@@ -113,13 +113,6 @@ def test_get_filename():
 
     assert utils.get_filename('dir2') == 'dir2'
     assert utils.get_filename('  dir2  ') == 'dir2'
-
-def test_handle_args():
-
-    args = ('scaffolder', 'schema.txt')
-    schema, output_dir, abs_base_path = utils.handle_args(args)
-    assert type(schema) == str
-    assert output_dir.startswith('SCAFFOLDER_OUTPUT')
 
 def test_get_paths():
     ''' Returns tuple of (abs_base_path, output_dir). '''

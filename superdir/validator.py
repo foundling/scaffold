@@ -1,4 +1,5 @@
-from utils import parse_indent, is_empty, is_comment, is_dir, is_multiple_of_indent, clean
+import sys
+from utils import parse_indent, is_empty, is_comment, is_dir, is_multiple_of_indent, clean, show_err_msg
 
 ''' 
     Validates schema and returns indent size if valid, otherwise raises ValueError.
@@ -32,12 +33,15 @@ class Validator():
             if (difference == 0) or\
                (difference == indent and is_dir(prev_line)) or\
                (difference < 0 and is_multiple_of_indent(this_indent, indent)):
-                prev_indent = this_indent
-                continue
-            else:
-                self.raise_parse_error(line_number=(index + start_index + 1), line=line)
 
-            prev_line = line
+                prev_indent = this_indent
+                prev_line = line
+
+                continue
+
+            show_err_msg(line_number=(index + start_index + 1), schema_lines=self.schema[:])
+            raise SystemExit(1) 
+
 
         self.indent_size = indent
 

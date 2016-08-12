@@ -9,18 +9,17 @@ import sys
 from tree import Tree
 import utils
 from validator import Validator
-from arg_handler import arg_handler 
+from args_handler import handle_args 
 
 
 def main():
 
     BASE_PATH = os.path.abspath(os.curdir)
-    SCHEMA_FILE, OUTPUT_DIR = args.handle_args(sys.argv)
+    schema, OUTPUT_DIR = handle_args(sys.argv[1:])
     indent_size = None
 
-    with open(SCHEMA_FILE) as fh:
-        raw_lines = fh.readlines()
-        schema = utils.clean(raw_lines)
+
+    schema = utils.clean(schema)
 
     validator = Validator()
     validator.load_schema(schema)

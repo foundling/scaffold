@@ -1,35 +1,13 @@
-immediate
--- 
-
-fix command line situation, using click.
-
-
---
+generalize 'indent' to mean anything the user specifies on command line or in config
+could be '|---' or a regex.
 
 Ensure unicode is handled properly.
 
-build each node's abs path in build_tree func
-
 Compatibility with python 3
-
-accept stdin stream.
-attend to build_tree loop
-
-write remaining tests
 
 try out coverage.py
 
 pep 8 review
-
-review packaging
-
-upload to pypi
-
-note compatibility issue with 2.x
-
-add contribution file / process
-
-Take a directory structure and turn it into a schema file.
 
 Config hooks for templates: when it finds a file or dir 
 name in your schema, it looks in a template dir for that stock 

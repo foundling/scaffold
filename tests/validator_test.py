@@ -3,30 +3,67 @@ from StringIO import StringIO
 
 import pytest
 
-from scaffolder.validator import Validator
+from superdir.validator import Validator
 
-good_schema = open('good_schema.txt').readlines()
-bad_schema = open('bad_schema.txt').readlines()
 
-def test_load_schema():
+def test_load_valid_schema():
+
+    schema = '''
+    dir1/
+    dir2/
+        dir3/
+            dir4/
+    '''
 
     validator = Validator()
-    validator.load_schema(good_schema)
-    assert validator.schema
+    validator.load_schema(schema)
 
+    assert validator.schema is not None
+    assert len(validator.schema) > 0
+    assert type(validator.schema) == list
 
 def test_validate_success():
 
+    good_schema = ''' 
+    app/
+        app/
+
+            app.py
+            lib.py
+    # Comment
+
+        docs/
+        tests/
+            app_test.py
+            lib_test.py
+    etc/
+    '''
+
     validator = Validator()
     validator.load_schema(good_schema)
-    indent_size = validator.validate()
+    validator.validate()
+    indent_size = validator.get_indent_size()
 
     assert indent_size >= 0
 
 def test_validate_failure():
 
+    bad_schema = ''' 
+    app/
+                   app/
+
+            app.py
+            lib.py
+    # Comment
+
+        docs/
+        tests/
+            app_test.py
+            lib_test.py
+    etc/
+    '''
+
     validator = Validator()
     validator.load_schema(bad_schema)
 
-    with pytest.raises(ValueError):
-        assert Validator().validate() >= 0
+    assert validator.validate() is None

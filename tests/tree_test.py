@@ -1,13 +1,25 @@
 import os
 from StringIO import StringIO
 
-from scaffolder.tree import Tree
-from scaffolder.utils import clean
+from superdir.tree import Tree
+from superdir.utils import clean
 
 def test_tree_obj():
 
-    schema_file = 'good_schema.txt'
-    schema = clean(open(schema_file).readlines())
+    schema = ''' 
+    app/
+        app/
+
+            app.py
+            lib.py
+    # Comment
+
+        docs/
+        tests/
+            app_test.py
+            lib_test.py
+    etc/
+    '''
 
     new_tree = Tree(
         indent_size = 4,
@@ -21,17 +33,33 @@ def test_tree_obj():
     assert new_tree.output_dir == 'new_app'
 
 def test_build_tree():
-    schema_file = 'good_schema.txt'
-    schema = clean(open(schema_file).readlines())
 
-    new_tree = Tree(
+    schema = ''' 
+    app/
+        app/
+
+            app.py
+            lib.py
+    # Comment
+
+        docs/
+        tests/
+            app_test.py
+            lib_test.py
+    etc/
+    '''
+
+
+    tree = Tree(
         indent_size = 4,
-        output_dir = 'new_app'
+        output_dir = 'new_app',
+        base_path = os.path.abspath(os.curdir)
     )
-    new_tree.load_data(schema)
-    new_tree.build_tree()
+    tree.load_data(schema)
+    tree.build_tree()
 
-    assert new_tree.root is not None
+    assert tree.root is not None
+    assert os.path.join(os.path.abspath(os.curdir), 'new_app') == os.path.join(tree.base_path, tree.output_dir)  
 
 
 def test_walk():
