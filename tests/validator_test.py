@@ -37,13 +37,14 @@ def test_validate_success():
             app_test.py
             lib_test.py
     etc/
-    '''
+    '''.split('\n')
 
     validator = Validator()
     validator.load_schema(good_schema)
     validator.validate()
     indent_size = validator.get_indent_size()
 
+    assert type(good_schema) == list 
     assert indent_size >= 0
 
 def test_validate_failure():
@@ -56,6 +57,8 @@ def test_validate_failure():
 
     validator = Validator()
     validator.load_schema(bad_schema)
+
+    assert type(bad_schema) == list 
     with pytest.raises(SystemExit):
         validator.validate()
 

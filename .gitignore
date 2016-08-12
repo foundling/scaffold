@@ -1,4 +1,5 @@
 clean/**/*
+superdir/output_dir
 plan.txt
 output
 env
