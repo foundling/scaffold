@@ -107,6 +107,20 @@ def get_paths(output_dir):
 
     return output_dir, abs_base_path
 
+def build_output_dirname(dir_suffix = 'SUPERDIR_OUTPUT', datestring=None):
+    ''' Appends a current date in YYYY-MM-DD-HH-MM format to a directory suffix. '''
+
+    if datestring is None:
+        import datetime
+
+        dt_now = datetime.datetime.now()
+        year, month, day, hour, minute = dt_now.year, dt_now.month, dt_now.day, dt_now.hour, dt_now.minute
+        datestring = '{}-{}-{}-{}-{}'.format(year, month, day, hour, minute)
+
+    output_dirname = '{}-{}'.format(dir_suffix, datestring)
+
+    return output_dirname
+
 def usage(out=sys.stdout):
     ''' Print usage info. '''
 

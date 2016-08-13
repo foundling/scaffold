@@ -63,7 +63,7 @@ def superdir(schema, OUTPUT_DIR, config_path):
     directory_tree.walk(callback=create_file)
 
 @click.command()
-@click.option('-o','--outfile', nargs=1, type=str,  help="Filename of the directory to contain your superdir'd files")
+@click.option('-o','--outfile', nargs=1, type=str,  help="Filename of the directory to contain your superdir'd files", default=utils.build_output_dirname())
 @click.option('-c','--config', nargs=1, type=str, help="Config file to read before superdir'ing your schema")
 @click.argument('schema_file', type=click.File('r'), required=True, default=sys.stdin)
 def main(schema_file, outfile, config):

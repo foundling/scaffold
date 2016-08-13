@@ -12,15 +12,13 @@ pip install superdir
 
 ````bash
 
-$ superdir schema.txt 
+Usage: superdir.py [OPTIONS] SCHEMA_FILE
 
-$ superdir schema.txt -o new_app 
-
-# read from stdin
-$ superdir schema.txt -- 
-
-# pipe data in
-$ cat schema.txt | superdir -o new_app
+Options:
+  -o, --outfile TEXT  Filename of the directory to contain your superdir'd
+                      files
+  -c, --config TEXT   Config file to read before superdir'ing your schema
+  --help              Show this message and exit.
 
 ````
 
