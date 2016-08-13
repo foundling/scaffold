@@ -35,7 +35,7 @@ See here for the [contributors guide](https://github.com/foundling/superdir/blob
 
 ## Motivation:
 
-`superdir` is a simple and quick way to generate a directory structure without code.  All you need is a schema file that you can generate yourself or copy from a tutorial you're following along with. Pipe it to `superdir` or pass it as an argument, and off you go.
+`superdir` is a simple and quick way to generate a directory structure without code.  All you need is a schema file that you can generate yourself or copy from a tutorial you're following along with. Pipe it to `superdir` or pass it as a filename argument, and off you go.
 
 ## Behavior:
 
