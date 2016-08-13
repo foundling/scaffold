@@ -2,7 +2,7 @@
 
 from __future__ import print_function 
 import sys
-from utils import parse_indent, is_empty, is_comment, is_dir, is_multiple_of_indent, clean, show_err_msg
+from utils import get_indent, parse_indent, is_empty, is_comment, is_dir, is_multiple_of_indent, clean, show_err_msg, build_output_dirname 
 
 ''' 
     Validates schema and returns indent size if valid, otherwise raises ValueError.
@@ -16,11 +16,12 @@ from utils import parse_indent, is_empty, is_comment, is_dir, is_multiple_of_ind
 
 class Validator():
 
-    def __init__(self):
+    def __init__(self, output_dir=None):
 
         self.indent = None
         self.schema = None
         self.indent_size = None
+        self.output_dir = output_dir
 
     def validate(self):
 
@@ -48,11 +49,34 @@ class Validator():
             continue
 
 
+        if self.output_dir is None:
+            self.check_top_level()
+
         self.indent_size = indent
 
     def load_schema(self, schema):
 
         self.schema = clean(schema)
+
+    def check_top_level(self):
+
+        indents = [ parse_indent(line) for line in self.schema ]
+        min_indent = min(indents) 
+        default_dirname = None 
+
+        if indents.count(min_indent) > 1:
+
+            print("Parse Error: You have multiple top-level directories"
+                         "but you have not supplied an output directory. please "
+                         "run superdir --help for more information")
+            raise SystemExit(1)
+        else:
+            default_dirname = build_output_dirname()
+            try:
+                open(default_dirname,'w')
+            except IOError:
+                print('couldnt create that directory') 
+                SystemExit(1)
 
     def get_indent_size(self):
 
