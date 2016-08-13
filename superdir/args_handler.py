@@ -1,21 +1,31 @@
+# -*- coding: utf-8 -*-
+
 import sys
+
+import click
+
 from utils import usage
 
-def get_now():
 
-    import datetime
+def output_dir_name(dir_suffix = 'SUPERDIR_OUTPUT', datestring=None):
+    ''' Appends a current date in YYYY-MM-DD-HH-MM format to a directory suffix. '''
 
-    dt_now = datetime.datetime.now()
-    year, month, day, hour, minute = dt_now.year, dt_now.month, dt_now.day, dt_now.hour, dt_now.minute
-    date_label = '{}-{}-{}-{}-{}'.format(year, month, day, hour, minute)
+    if datestring is None:
+        import datetime
 
-    return date_label
+        dt_now = datetime.datetime.now()
+        year, month, day, hour, minute = dt_now.year, dt_now.month, dt_now.day, dt_now.hour, dt_now.minute
+        datestring = '{}-{}-{}-{}-{}'.format(year, month, day, hour, minute)
 
-def handle_args(args):
+    output_dir_name = '{}-{}'.format(dir_suffix, datestring)
+
+    return output_dir_name
+
+def handle_args_old(args):
     ''' Args does not include the filename from sys.argv[0] '''
 
     output_dir, schema = None, None
-    date_stamp = 'SUPERDIR_OUTPUT_{}'.format(get_now())
+    date_stamp = 'SUPERDIR_OUTPUT_{}'.format(current_datestamp())
 
     if sys.stdin.isatty():
 
