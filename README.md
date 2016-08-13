@@ -8,6 +8,12 @@
 pip install superdir
 ````
 
+## Dependencies
+
+````bash
+Click
+````
+
 ## Usage:
 
 ````bash
