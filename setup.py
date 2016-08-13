@@ -19,7 +19,7 @@ setup(
     scripts = ['bin/superdir'],
     long_description = read('README.md'),
     install_requires = [
-        'superdir'
+        'click'
     ],
     classifiers=[
         'License :: OSI Approved :: MIT License',
