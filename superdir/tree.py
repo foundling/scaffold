@@ -10,7 +10,9 @@ class Tree:
     def __init__(self, indent_size=None, output_dir=None, base_path=None):
 
         if os.path.exists(output_dir):
-            raise IOError('The directory {} already exists'.format(self.output_dir))
+            raise IOError(
+                'The directory {} already exists'.format(self.output_dir)
+            )
 
         self.indent_size = indent_size
         self.output_dir = output_dir
@@ -19,7 +21,9 @@ class Tree:
         self.root = None
 
     def build_tree(self):
-        ''' Derive parent/child hierarchy from current and previous lines' indentation relationship.  '''
+        ''' Derive parent/child hierarchy from current and previous lines' 
+        indentation relationship.  
+        '''
 
         virtual_root = self._make_new_node(
             parent      = None,
@@ -32,7 +36,9 @@ class Tree:
             children    = [],
             value       = self.output_dir, 
             # issue here: if no output dir? Then what ?
-            path        = os.path.join(self.base_path, self.output_dir) if self.output_dir else '' 
+            path        = os.path.join(self.base_path, self.output_dir)\
+                          if self.output_dir\
+                          else '' 
         )
         virtual_root['children'].append(root)
 
@@ -41,16 +47,13 @@ class Tree:
         for line in self.data:
 
             cur_indent = utils.get_indent(line, self.indent_size)
-            filename = utils.get_dirname(line) if utils.is_dir(line) else utils.get_filename(line)
+            filename = utils.get_dirname(line)\
+                       if utils.is_dir(line)\
+                       else utils.get_filename(line)
 
-
-            ### Find Parent Node of this Line - Put this in a function ###
-
-            # indent, so this is directory
             if cur_indent > prev_indent:
                 parent_node = parent_node['children'][-1]
 
-            # unindent, so this could be anything, but it's in some other part of the tree
             elif cur_indent < prev_indent:
                 distance = prev_indent - cur_indent
                 parent_node = self._find_ancestor(parent_node, distance)
@@ -89,11 +92,13 @@ class Tree:
         self.data = utils.clean(data)
 
     def _make_new_node(self, parent=None, value=None, children=None, path=''):
-        ''' create a new node. if children is Nonetype, node is treated as a leaf. '''
+        ''' Create a new node. If children is NoneType, node is treated as a 
+        leaf. 
+        '''
         return  dict(parent=parent, value=value, children=children, path=path)
 
     def _find_ancestor(self, start_node, parents_to_visit):
-        ''' use indentation level relative to previous line to find ancestor.'''
+        ''' Use indentation level relative to previous line to find ancestor.'''
         current_node = start_node
 
         while (parents_to_visit > 0):
