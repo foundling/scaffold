@@ -22,26 +22,27 @@ def create_file(node):
     else:
         os.mkdir(file_to_create)
 
-def main(schema=None, output_dir=None, config_path=None):
+def main(schema=None, OUTPUT_DIR=None, CONFIG_PATH=None):
     ''' '''
 
     BASE_PATH = os.path.abspath(os.curdir)
-
     indent_size = None
-    validator = Validator(output_dir)
+
+    validator = Validator(OUTPUT_DIR)
     validator.load_schema(schema)
-    validator.validate_indent()
-    indent_size = validator.get_indent_size()
+    if not validator.passed_validation():
+        sys.stdout.write(validator.error_data['error'] + '\n')
+        sys.stdout.write(validator.error_data['line_number'] + '\n')
+        sys.stdout.write(validator.error_data['data'] + '\n')
+    INDENT_SIZE = validator.INDENT_SIZE
 
     directory_tree = Tree(
-        indent_size = indent_size,
-        output_dir  = output_dir,
+        INDENT_SIZE = INDENT_SIZE,
+        OUTPUT_DIR  = OUTPUT_DIR,
         base_path   = BASE_PATH
     )
     directory_tree.load_data(schema)
     directory_tree.build_tree()
-
-
     directory_tree.walk(callback=create_file)
 
 
@@ -65,9 +66,8 @@ def cli(schema_file, outfile, config):
         # schema from a file
         schema = list(schema_file)
 
-    main(schema=schema, output_dir=outfile, config_path=config)
+    main(schema=schema, OUTPUT_DIR=outfile, CONFIG_PATH=config)
 
 if __name__ == '__main__':
 
     cli()
-

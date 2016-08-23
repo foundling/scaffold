@@ -1,28 +1,58 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import print_function 
 import sys
-from utils import get_indent, parse_indent, is_empty, is_comment, is_dir,\
-                  is_multiple_of_indent, clean, show_err_msg,\
-                  build_output_dirname 
+import utils
 
 class Validator():
 
-    def __init__(self, output_dir=None):
+    def __init__(self, OUTPUT_DIR=None):
 
-        self.indent = None
         self.schema = None
-        self.indent_size = None
-        self.output_dir = output_dir
+        self.INDENT_SIZE = None
+        self.OUTPUT_DIR = OUTPUT_DIR
+        self.error_data = { 
+            'error': '',
+            'line_number': '', 
+            'data': ''
+        }
 
     def load_schema(self, schema):
+        ''' Bind array of cleaned schema file lines to validator object. ''' 
 
-        self.schema = clean(schema)
+        self.schema = utils.clean(schema)
 
-    def validate_indent(self):
-        ''' 
-        Validates schema and raises ValueError if invalid.
+    def passed_validation(self):
+        ''' Validate schema and raises ValueError if invalid. '''
 
+        self.INDENT_SIZE, start_index = self._find_first_indent()
+        prev_indent = self.INDENT_SIZE
+        prev_line = self.schema[start_index]
+        lines_to_validate = self.schema[start_index + 1:]
+        schema_is_valid = True
+
+        for index, this_line in enumerate( lines_to_validate ):
+
+            this_indent = utils.parse_indent(this_line)
+            if not self._line_is_valid(this_line, prev_line, this_indent, prev_indent):
+
+                self.error_data['line_number'] = (index + start_index + 1)
+                self.error_data['schema'] = self.schema[:]
+                schema_is_valid = False
+                break
+
+            prev_indent = this_indent
+            prev_line = this_line
+
+        if not self._top_dir_is_valid(self.OUTPUT_DIR):
+            self.error_data['line_number'] = str(index + start_index + 1)
+            self.error_data['schema'] = '\n'.join(self.schema[:])
+            schema_is_valid = False
+
+        return schema_is_valid
+
+
+    def _line_is_valid(self, this_line, prev_line, this_indent, prev_indent):
+        '''
         Once the first indent size is determined, each subsequent
         indent must be:
 
@@ -31,58 +61,28 @@ class Validator():
             3) preceded by a directory and greater than N by exactly N.
         '''
 
-        indent, start_index = self._find_first_indent()
+        difference = this_indent - prev_indent
 
-        prev_indent = indent
-        prev_line = self.schema[start_index]
-        for index, line in enumerate( self.schema[start_index + 1:] ):
+        return  (difference == 0) or\
+                (difference == self.INDENT_SIZE and utils.is_dir(prev_line)) or\
+                (difference < 0 and utils.is_multiple_of_indent(this_indent, self.INDENT_SIZE)) 
 
-            this_indent = parse_indent(line) 
-            difference = this_indent - prev_indent
-            valid_line = ( 
-                (difference == 0) or\
-                (difference == indent and is_dir(prev_line)) or\
-                (difference < 0 and is_multiple_of_indent(this_indent, indent))             ) 
 
-            if not valid_line:
-                show_err_msg(
-                    line_number = (index + start_index + 1),
-                    schema_lines = self.schema[:]
-                )
-                raise SystemExit(1) 
+    def _top_dir_is_valid(self, OUTPUT_DIR):
 
-            prev_indent = this_indent
-            prev_line = line
-            continue
-
-        self.check_top_dir(self.output_dir)
-        self.indent_size = indent
-
-    def check_top_dir(self, output_dir):
-
-        indents = [ parse_indent(line) for line in self.schema ]
+        indents = [ utils.parse_indent(line) for line in self.schema ]
         min_indent = min(indents) 
-        default_dirname = None 
 
-        if indents.count(min_indent) > 1 and not output_dir:
-
-            sys.stdout.write('''Parse Error: You have multiple top-level 
-                                directories but you have not supplied an output                                directory. See superdir --help for more 
-                                information''')
-            raise SystemExit(1)
-
-    def get_indent_size(self):
-
-        return self.indent_size
+        return indents.count(min_indent) > 1 and not OUTPUT_DIR
 
     def _find_first_indent(self):
         ''' Returns indent_value, start_index of first indent. '''
 
-        indent, start_index = 0, 0 
+        indent_size, start_index = 0, 0 
 
         for index, line in enumerate(self.schema):
-            if parse_indent(line) > 0:
-                indent = parse_indent(line)
+            if utils.parse_indent(line) > 0:
+                indent_size = utils.parse_indent(line)
                 break
 
-        return indent, start_index
+        return indent_size, start_index

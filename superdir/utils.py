@@ -44,7 +44,7 @@ def parse_indent(line):
 
     return len(line) - len(line.lstrip())
 
-def get_indent(line, indent_size):
+def get_indent_count(line, indent_size):
     ''' Return the number of indentation units after dividing a line of 
     text's leading space count by some indent_size. 
     '''

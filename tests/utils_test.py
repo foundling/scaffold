@@ -92,15 +92,15 @@ def test_parse_indent():
     assert utils.parse_indent(indent_b) == 2
     assert utils.parse_indent(indent_c) == 4
 
-def test_get_indent():
+def test_get_indent_size():
 
     case_a = ('    dir1/', 4)
     case_b = ('        dir1/', 4)
     case_c = ('file1.txt', 4)
 
-    assert utils.get_indent(*case_a) == 1
-    assert utils.get_indent(*case_b) == 2
-    assert utils.get_indent(*case_c) == 0
+    assert utils.get_indent_size(*case_a) == 1
+    assert utils.get_indent_size(*case_b) == 2
+    assert utils.get_indent_size(*case_c) == 0
 
 def test_get_dirname():
 

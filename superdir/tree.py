@@ -7,13 +7,13 @@ import pdb
 
 class Tree:
 
-    def __init__(self, indent_size=None, output_dir=None, base_path=None):
+    def __init__(self, INDENT_SIZE=None, OUTPUT_DIR=None, base_path=None):
 
-        if os.path.exists(output_dir):
-            raise IOError('The directory {} already exists'.format(self.output_dir))
+        if os.path.exists(OUTPUT_DIR):
+            raise IOError('The directory {} already exists'.format(self.OUTPUT_DIR))
 
-        self.indent_size = indent_size
-        self.output_dir = output_dir
+        self.INDENT_SIZE = INDENT_SIZE
+        self.OUTPUT_DIR = OUTPUT_DIR
         self.base_path = base_path
         self.data = None
         self.root = None
@@ -31,10 +31,10 @@ class Tree:
         root = self._make_new_node(
             parent      = virtual_root,
             children    = [],
-            value       = self.output_dir, 
+            value       = self.OUTPUT_DIR, 
             # issue here: if no output dir? Then what ?
-            path        = os.path.join(self.base_path, self.output_dir)\
-                          if self.output_dir\
+            path        = os.path.join(self.base_path, self.OUTPUT_DIR)\
+                          if self.OUTPUT_DIR\
                           else '' 
         )
 
@@ -44,7 +44,7 @@ class Tree:
         prev_indent = -1
         for line in self.data:
 
-            cur_indent = utils.get_indent(line, self.indent_size)
+            cur_indent = utils.get_indent_count(line, self.INDENT_SIZE)
             filename = utils.get_dirname(line)\
                        if utils.is_dir(line)\
                        else utils.get_filename(line)
