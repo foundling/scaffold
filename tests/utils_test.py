@@ -1,7 +1,7 @@
 import os
 from StringIO import StringIO
 
-from superdir import utils, args_handler
+from superdir import utils
 
 def test_usage():
 

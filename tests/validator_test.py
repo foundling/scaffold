@@ -22,7 +22,7 @@ def test_load_valid_schema():
     assert len(validator.schema) > 0
     assert type(validator.schema) == list
 
-def test_validate_success():
+def test_validate_indent_success():
 
     good_schema = ''' 
     app/
@@ -41,13 +41,13 @@ def test_validate_success():
 
     validator = Validator()
     validator.load_schema(good_schema)
-    validator.validate()
+    validator.validate_indent()
     indent_size = validator.get_indent_size()
 
     assert type(good_schema) == list 
     assert indent_size >= 0
 
-def test_validate_failure():
+def test_validate_indent_failure():
 
     bad_schema = '''
     dir1/ 
@@ -60,4 +60,4 @@ def test_validate_failure():
 
     assert type(bad_schema) == list 
     with pytest.raises(SystemExit):
-        validator.validate()
+        validator.validate_indent()

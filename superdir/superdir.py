@@ -2,29 +2,24 @@
 # -*- coding: utf-8 -*-
 
 
-
-from __future__ import print_function
-import datetime
 import os
 import sys
 
 import click
 
 from tree import Tree
-import utils
 from validator import Validator
 from cli import cli
-
-CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
+import utils
 
 def main(schema=None, output_dir=None, config_path=None):
 
     BASE_PATH = os.path.abspath(os.curdir)
-    indent_size = None
 
+    indent_size = None
     validator = Validator(output_dir)
     validator.load_schema(schema)
-    validator.validate()
+    validator.validate_indent()
     indent_size = validator.get_indent_size()
 
     directory_tree = Tree(
@@ -40,7 +35,7 @@ def main(schema=None, output_dir=None, config_path=None):
 
         file_to_create = node['path']
         if node['children'] is None:
-            open(file_to_create,'w')
+            open(file_to_create,'w').close()
         else:
             os.mkdir(file_to_create)
 
@@ -48,5 +43,6 @@ def main(schema=None, output_dir=None, config_path=None):
     directory_tree.walk(callback=create_file)
 
 if __name__ == '__main__':
+
     schema, outfile, config = cli()
     main(schema=schema, output_dir=outfile, config_path=config)

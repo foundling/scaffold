@@ -6,17 +6,6 @@ from utils import get_indent, parse_indent, is_empty, is_comment, is_dir,\
                   is_multiple_of_indent, clean, show_err_msg,\
                   build_output_dirname 
 
-''' 
-    Validates schema and returns indent size if valid, otherwise raises 
-    ValueError.
-
-    Once an indent size N is determined, each indentation level must be:
-
-        1) less than N by a multiple of N,  e.g. 8 -> 4 or 8 -> 0
-        2) 0, or 
-        3) preceded by a directory and greater than N by exactly N.
-'''
-
 class Validator():
 
     def __init__(self, output_dir=None):
@@ -26,7 +15,21 @@ class Validator():
         self.indent_size = None
         self.output_dir = output_dir
 
-    def validate(self):
+    def load_schema(self, schema):
+
+        self.schema = clean(schema)
+
+    def validate_indent(self):
+        ''' 
+        Validates schema and raises ValueError if invalid.
+
+        Once the first indent size is determined, each subsequent
+        indent must be:
+
+            1) less than N by a multiple of N,  e.g. 8 -> 4 or 8 -> 0
+            2) 0, or 
+            3) preceded by a directory and greater than N by exactly N.
+        '''
 
         indent, start_index = self._find_first_indent()
 
@@ -52,34 +55,21 @@ class Validator():
             prev_line = line
             continue
 
-        if self.output_dir is None:
-            self.check_top_level()
-
+        self.check_top_dir(self.output_dir)
         self.indent_size = indent
 
-    def load_schema(self, schema):
-
-        self.schema = clean(schema)
-
-    def check_top_level(self):
+    def check_top_dir(self, output_dir):
 
         indents = [ parse_indent(line) for line in self.schema ]
         min_indent = min(indents) 
         default_dirname = None 
 
-        if indents.count(min_indent) > 1:
+        if indents.count(min_indent) > 1 and not output_dir:
 
-            print('''Parse Error: You have multiple top-level directories but
-                     you have not supplied an output directory. See superdir 
-                     --help for more information''')
+            sys.stdout.write('''Parse Error: You have multiple top-level 
+                                directories but you have not supplied an output                                directory. See superdir --help for more 
+                                information''')
             raise SystemExit(1)
-        else:
-            default_dirname = build_output_dirname()
-            try:
-                open(default_dirname,'w')
-            except IOError:
-                print('couldnt create that directory') 
-                SystemExit(1)
 
     def get_indent_size(self):
 
