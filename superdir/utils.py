@@ -29,7 +29,7 @@ def is_multiple_of_indent(this_indent, global_indent):
     return this_indent == 0
 
 def clean(lines):
-    ''' discard all comments and lines with nothing or whitespace ''' 
+    ''' Discard all comments and lines with nothing or whitespace. ''' 
 
     return [ 
             line.rstrip() 
@@ -38,6 +38,7 @@ def clean(lines):
 
 def parse_indent(line):
     ''' Return the leading number of spaces in a line of text. '''
+
     return len(line) - len(line.lstrip())
 
 def get_indent(line, indent_size):
@@ -69,31 +70,7 @@ def get_filename(line):
     return line.strip()
 
 def get_paths(output_dir):
-    ''' Takes the output directory and breaks it into the relative directory 
-    name and the base path/starting point for the traversal. 
-
-    ABSOLUTE:
-
-        original output_dir = /data/apps/new_app 
-
-        output_dir = new_app 
-        full_base_path = /data/apps
-
-    RELATIVE WITH MULTIPLE LEVELS:
-
-        original output_dir = apps/new_app 
-
-        output_dir = new_app 
-        full_base_path = cwd() + '/' + apps/
-
-    RELATIVE WITH A SINGLE LEVEL:
-
-        original_output_dir = new_app
-
-        output_dir = new_app 
-        full_base_path = cwd() 
-
-    '''
+    ''' Turn /path/to/output_dir into /path/to, output_dir. '''
 
     abs_cur_dir = os.path.abspath(os.curdir)
     full_base_path = None
