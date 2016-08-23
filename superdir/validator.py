@@ -2,10 +2,13 @@
 
 from __future__ import print_function 
 import sys
-from utils import get_indent, parse_indent, is_empty, is_comment, is_dir, is_multiple_of_indent, clean, show_err_msg, build_output_dirname 
+from utils import get_indent, parse_indent, is_empty, is_comment, is_dir,\
+                  is_multiple_of_indent, clean, show_err_msg,\
+                  build_output_dirname 
 
 ''' 
-    Validates schema and returns indent size if valid, otherwise raises ValueError.
+    Validates schema and returns indent size if valid, otherwise raises 
+    ValueError.
 
     Once an indent size N is determined, each indentation level must be:
 
@@ -33,9 +36,10 @@ class Validator():
 
             this_indent = parse_indent(line) 
             difference = this_indent - prev_indent
-            valid_line = ( (difference == 0) or\
-                           (difference == indent and is_dir(prev_line)) or\
-                           (difference < 0 and is_multiple_of_indent(this_indent, indent)) ) 
+            valid_line = ( 
+                (difference == 0) or\
+                (difference == indent and is_dir(prev_line)) or\
+                (difference < 0 and is_multiple_of_indent(this_indent, indent))             ) 
 
             if not valid_line:
                 show_err_msg(
@@ -47,7 +51,6 @@ class Validator():
             prev_indent = this_indent
             prev_line = line
             continue
-
 
         if self.output_dir is None:
             self.check_top_level()
@@ -66,9 +69,9 @@ class Validator():
 
         if indents.count(min_indent) > 1:
 
-            print("Parse Error: You have multiple top-level directories"
-                         "but you have not supplied an output directory. please "
-                         "run superdir --help for more information")
+            print('''Parse Error: You have multiple top-level directories but
+                     you have not supplied an output directory. See superdir 
+                     --help for more information''')
             raise SystemExit(1)
         else:
             default_dirname = build_output_dirname()
@@ -83,7 +86,7 @@ class Validator():
         return self.indent_size
 
     def _find_first_indent(self):
-        ''' returns indent_value, start_index '''
+        ''' Returns indent_value, start_index of first indent. '''
 
         indent, start_index = 0, 0 
 
