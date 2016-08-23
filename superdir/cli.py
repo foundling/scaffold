@@ -12,6 +12,8 @@ superdir -c config
 
 '''
 
+import sys
+
 import click
 
 @click.command(context_settings=dict(help_option_names=['-h', '--help']))
