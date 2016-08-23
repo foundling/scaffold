@@ -12,6 +12,16 @@ from validator import Validator
 from cli import cli
 import utils
 
+
+def create_file(node):
+    ''' File creation callback to run on each tree node. '''
+
+    file_to_create = node['path']
+    if node['children'] is None:
+        open(file_to_create,'w').close()
+    else:
+        os.mkdir(file_to_create)
+
 def main(schema=None, output_dir=None, config_path=None):
     ''' '''
 
@@ -30,15 +40,6 @@ def main(schema=None, output_dir=None, config_path=None):
     )
     directory_tree.load_data(schema)
     directory_tree.build_tree()
-
-    def create_file(node):
-        ''' File creation callback to run on each tree node. '''
-
-        file_to_create = node['path']
-        if node['children'] is None:
-            open(file_to_create,'w').close()
-        else:
-            os.mkdir(file_to_create)
 
 
     directory_tree.walk(callback=create_file)

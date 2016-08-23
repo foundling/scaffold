@@ -10,9 +10,7 @@ class Tree:
     def __init__(self, indent_size=None, output_dir=None, base_path=None):
 
         if os.path.exists(output_dir):
-            raise IOError(
-                'The directory {} already exists'.format(self.output_dir)
-            )
+            raise IOError('The directory {} already exists'.format(self.output_dir))
 
         self.indent_size = indent_size
         self.output_dir = output_dir
@@ -21,9 +19,7 @@ class Tree:
         self.root = None
 
     def build_tree(self):
-        ''' Derive parent/child hierarchy from current and previous lines' 
-        indentation relationship.  
-        '''
+        ''' Build tree from indentation. '''
 
         virtual_root = self._make_new_node(
             parent      = None,
@@ -31,6 +27,7 @@ class Tree:
             value       = 'virtual_root',
             path        = self.base_path
         )
+
         root = self._make_new_node(
             parent      = virtual_root,
             children    = [],
@@ -40,6 +37,7 @@ class Tree:
                           if self.output_dir\
                           else '' 
         )
+
         virtual_root['children'].append(root)
 
         parent_node = virtual_root
@@ -87,18 +85,19 @@ class Tree:
         _walk(tree)
 
     def load_data(self, data):
-        ''' Load the input data and clean it. '''
+        ''' Load and clean up input data '''
 
         self.data = utils.clean(data)
 
-    def _make_new_node(self, parent=None, value=None, children=None, path=''):
+    def _make_new_node(self, parent=None, children=None, value=None, path=''):
         ''' Create a new node. If children is NoneType, node is treated as a 
         leaf. 
         '''
-        return  dict(parent=parent, value=value, children=children, path=path)
+        return  dict(parent=parent, children=children, value=value, path=path)
 
     def _find_ancestor(self, start_node, parents_to_visit):
-        ''' Use indentation level relative to previous line to find ancestor.'''
+        ''' Return parent directory corresponding to node parsed from current line. '''
+
         current_node = start_node
 
         while (parents_to_visit > 0):
