@@ -4,6 +4,6 @@ dir2/
     file2.txt
 dir3/
     file3.txt
-    dir4/
-        dir5/
-file4.txt
+dir4/
+    dir5/
+        file4.txt
