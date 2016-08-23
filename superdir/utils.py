@@ -10,6 +10,9 @@ import os
 import sys
 
 def is_empty(line):
+    ''' Return True if line is equal to empty string after being stripped of 
+    whitespace. Otherwise, return False.
+    '''
     return line.strip() is ''
 
 def is_comment(line):
