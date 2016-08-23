@@ -33,9 +33,10 @@ import click
     '--outfile', 
     nargs=1,
     type=str,
-    help="Directory name to contain your superdir'd files. If none is suppied,"         "your schema file must have exactly one top-level directory and no" 
-         "sibling regular files. That top-level directory will be the parent"
-         "of your new file tree.")
+    help='''Directory name to contain your superdir'd files. If none is 
+         supplied, your schema file must have exactly one top-level directory 
+         and no sibling regular files. That top-level directory will be the 
+         parent of your new file tree.''')
 def cli(schema_file, outfile, config):
 
     schema = None
