@@ -24,21 +24,15 @@ def create_file(node):
 def main(schema=None, OUTPUT_DIR=None, CONFIG_PATH=None):
     ''' Validate schema file and output directory parameters, build a tree from schema, callback on each node.  '''
 
-    BASE_PATH = os.path.abspath(os.curdir)
-    indent_size = None
-
-    validator = Validator(OUTPUT_DIR)
-    validator.load_schema(schema)
-    if not validator.passed_validation():
-        sys.stdout.write(validator.error_data['error'] + '\n')
-        sys.stdout.write(validator.error_data['line_number'] + '\n')
-        sys.stdout.write(validator.error_data['data'] + '\n')
-    INDENT_SIZE = validator.INDENT_SIZE
+    validator = Validator(schema, OUTPUT_DIR=OUTPUT_DIR)
+    if not validator.validate():
+        sys.stdout.write(validator.error['msg'] + '\n')
+        sys.exit(1)
 
     directory_tree = Tree(
-        INDENT_SIZE = INDENT_SIZE,
+        INDENT_SIZE = validator.INDENT_SIZE,
         OUTPUT_DIR  = OUTPUT_DIR,
-        base_path   = BASE_PATH
+        base_path   = os.path.abspath(os.curdir)
     )
     directory_tree.load_data(schema)
     directory_tree.build_tree()
@@ -51,7 +45,8 @@ def main(schema=None, OUTPUT_DIR=None, CONFIG_PATH=None):
 @click.option('-o', '--outfile', nargs=1, type=str, help=("Directory name to contain your superdir'd files. If none is" 
                                                           "supplied, your schema file must have exactly one top-level directory"         
                                                           "and no sibling regular files. That top-level directory will be the"
-                                                          "parent of your new file tree."))
+                                                          "parent of your new file tree. If an output directory is supplied"
+                                                          "then any validly-indented schema file is allowed."))
 def cli(schema_file, outfile, config):
 
     schema = None
