@@ -14,13 +14,12 @@ import utils
 
 
 def create_file(node):
-    ''' File creation callback to run on each tree node. '''
+    ''' Create a regular file if node has NoneType for children.  Otherwise, creates a directory. '''
 
-    file_to_create = node['path']
     if node['children'] is None:
-        open(file_to_create,'w').close()
+        open(node['path'], 'w').close()
     else:
-        os.mkdir(file_to_create)
+        os.mkdir(node['path'])
 
 def main(schema=None, OUTPUT_DIR=None, CONFIG_PATH=None):
     ''' '''
