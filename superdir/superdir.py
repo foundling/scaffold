@@ -10,16 +10,9 @@ import click
 from tree import Tree
 from validator import Validator
 from cli import cli
+import callbacks as cbs
 import utils
 
-
-def create_file(node):
-    ''' Create a regular file if node has NoneType for children.  Otherwise, creates a directory. '''
-
-    if node['children'] is None:
-        open(node['path'], 'w').close()
-    else:
-        os.mkdir(node['path'])
 
 def main(schema=None, OUTPUT_DIR=None, CONFIG_PATH=None):
     ''' Validate schema file and output directory parameters, build a tree from schema, callback on each node.  '''
@@ -36,12 +29,18 @@ def main(schema=None, OUTPUT_DIR=None, CONFIG_PATH=None):
     )
     directory_tree.load_data(schema)
     directory_tree.build_tree()
-    directory_tree.walk(callback=create_file)
+
+    callbacks = [
+        cbs.create_file,
+    ]
+    if CONFIG_PATH:
+        callbacks.append(cbs.make_config_processor(CONFIG_PATH))
+    directory_tree.walk(callbacks=callbacks)
 
 
 @click.command(context_settings=dict(help_option_names=['-h', '--help']))
 @click.argument('schema_file', type=click.File('r'), required=True, default=sys.stdin)
-@click.option('-c', '--config', nargs=1, type=str, help="Config file to read before superdir'ing your schema.")
+@click.option('-c', '--config', nargs=1, type=str, help="Path to config file to read before superdir'ing your schema.")
 @click.option('-o', '--outfile', nargs=1, type=str, help=("Directory name to contain your superdir'd files. If none is" 
                                                           "supplied, your schema file must have exactly one top-level directory"         
                                                           "and no sibling regular files. That top-level directory will be the"

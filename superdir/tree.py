@@ -2,6 +2,7 @@
 
 from __future__ import print_function
 import os
+import sys
 import utils
 import pdb
 
@@ -10,7 +11,8 @@ class Tree:
     def __init__(self, INDENT_SIZE=None, OUTPUT_DIR=None, base_path=None):
 
         if os.path.exists(OUTPUT_DIR):
-            raise IOError('The directory {} already exists'.format(self.OUTPUT_DIR))
+            print('Error, the directory {} already exists'.format(OUTPUT_DIR)) 
+            sys.exit(1)
 
         self.INDENT_SIZE = INDENT_SIZE
         self.OUTPUT_DIR = OUTPUT_DIR
@@ -68,7 +70,7 @@ class Tree:
 
         self.root = virtual_root
 
-    def walk(self, callback):
+    def walk(self, callbacks):
         ''' Walk tree and call callback on each node. '''
 
         def _walk(tree):
@@ -76,7 +78,10 @@ class Tree:
             children = tree['children']
 
             for child in children:
-                callback(child)
+
+                if callbacks:
+                    for cb in callbacks:
+                        cb(child)
 
                 if child['children'] is not None:
                     _walk(child)
