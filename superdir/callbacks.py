@@ -31,9 +31,10 @@ def make_config_processor(config_path=None):
 
         with open(full_path) as config_file:
             hooks = dict([ map(str.strip, line.split('=')) for line in config_file  if line.strip() ])
-            print hooks
+
     except IOError as E:
-        print('Could not open config file: {}'.format(full_path))
+        print('Could not open config file.')
+        print E
 
 
     def process_config_hooks(node):
