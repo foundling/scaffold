@@ -33,8 +33,11 @@ def main(schema=None, OUTPUT_DIR=None, CONFIG_PATH=None):
     callbacks = [
         cbs.create_file,
     ]
+
     if CONFIG_PATH:
-        callbacks.append(cbs.make_config_processor(CONFIG_PATH))
+        process_hooks = cbs.make_config_processor(CONFIG_PATH)
+        callbacks.append(process_hooks)
+
     directory_tree.walk(callbacks=callbacks)
 
 
