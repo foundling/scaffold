@@ -22,7 +22,7 @@ def create_file(node):
         os.mkdir(node['path'])
 
 def main(schema=None, OUTPUT_DIR=None, CONFIG_PATH=None):
-    ''' '''
+    ''' Validate schema file and output directory parameters, build a tree from schema, callback on each node.  '''
 
     BASE_PATH = os.path.abspath(os.curdir)
     indent_size = None
@@ -57,11 +57,13 @@ def cli(schema_file, outfile, config):
     schema = None
 
     if schema_file is None:
+
         # schema probably coming from a pipe
         if not sys.stdin.isatty():
             schema = list(sys.stdin) 
 
     else:
+
         # schema from a file
         schema = list(schema_file)
 
