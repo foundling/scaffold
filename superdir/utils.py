@@ -94,7 +94,7 @@ def get_paths(output_dir):
         else:
             abs_base_path = abs_cur_dir 
 
-    return output_dir, abs_base_path
+    return abs_base_path, output_dir
 
 def build_output_dirname(dir_suffix='SUPERDIR_OUTPUT', datestring=None):
     ''' Appends a current date in YYYY-MM-DD-HH-MM format to a directory 

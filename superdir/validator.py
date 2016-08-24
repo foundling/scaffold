@@ -11,14 +11,18 @@ class Validator():
         self.schema = utils.clean(schema)
         self.OUTPUT_DIR = OUTPUT_DIR
         self.INDENT_SIZE = self._find_first_indent()['indent_size']
-        self.error = {'line_number': None}
+        self.error = {'msg': None}
 
     def validate(self):
         ''' Return True if schema is valid, otherwise return False. '''
 
+        if not len(self.schema): 
+            self.error['msg'] = 'Error: empty schema file.'
+            return False
+
         start_index = self._find_first_indent()['index']
-        prev_indent = self.INDENT_SIZE
         prev_line = self.schema[start_index]
+        prev_indent = self.INDENT_SIZE
 
         schema_is_valid = True
 
@@ -28,15 +32,16 @@ class Validator():
             this_indent = utils.parse_indent(this_line)
             if not self._line_is_valid(this_line, prev_line, this_indent, prev_indent):
 
-                self.error['line_number'] = (index + start_index + 1)
+                self.error['msg'] = 'Error in schema file on line {}'.format((index + start_index + 1))
                 schema_is_valid = False
                 break
 
             prev_indent = this_indent
             prev_line = this_line
 
+
         if not self._top_dir_is_valid(self.OUTPUT_DIR):
-            self.error['line_number'] = str(index + start_index + 1)
+            self.error['msg'] = 'Error regarding top-level directory rules. See superdir --help for usage.'
             schema_is_valid = False
 
         return schema_is_valid
@@ -60,11 +65,12 @@ class Validator():
 
 
     def _top_dir_is_valid(self, OUTPUT_DIR):
+        ''' Return True only if output dir is supplied or schema file has exactly 1 top-level directory and no siblings '''
 
         indents = [ utils.parse_indent(line) for line in self.schema ]
-        min_indent = min(indents) 
+        min_indent_count = indents.count( min(indents) ) 
 
-        return indents.count(min_indent) > 1 and not OUTPUT_DIR
+        return OUTPUT_DIR is not None or min_indent_count == 1 
 
     def _find_first_indent(self):
         ''' Returns indent_value, start_index of first indent. '''

@@ -24,9 +24,8 @@ import click
                                                           "supplied, your schema file must have exactly one top-level directory"         
                                                           "and no sibling regular files. That top-level directory will be the"
                                                           "parent of your new file tree."))
-def cli(schema_file, outfile, config, callback=None):
+def cli(schema_file, outfile, config):
 
-    click.echo(callback);
     schema = None
 
     if schema_file is None:

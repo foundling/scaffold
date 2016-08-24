@@ -26,7 +26,7 @@ def main(schema=None, OUTPUT_DIR=None, CONFIG_PATH=None):
 
     validator = Validator(schema, OUTPUT_DIR=OUTPUT_DIR)
     if not validator.validate():
-        sys.stdout.write(validator.error['msg'] + '\n')
+        click.echo(validator.error['msg'])
         sys.exit(1)
 
     directory_tree = Tree(
