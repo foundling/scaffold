@@ -5,59 +5,41 @@ import pytest
 
 from superdir.validator import Validator
 
-def test_load_valid_schema():
+def test_validate_suceeds():
 
-    schema = '''
+    good_schema = '''
     dir1/
     dir2/
         dir3/
             dir4/
     '''.split('\n')
 
-    validator = Validator()
-    validator.load_schema(schema)
+    validator = Validator(good_schema)
+    assert validator.validate()
 
-    assert type(schema) == list
-    assert validator.schema is not None
-    assert len(validator.schema) > 0
-    assert type(validator.schema) == list
 
-def test_passed_validation():
-
-    good_schema = ''' 
-    app/
-        app/
-
-            app.py
-            lib.py
-    # Comment
-
-        docs/
-        tests/
-            app_test.py
-            lib_test.py
-    etc/
-    '''.split('\n')
-
-    validator = Validator()
-    validator.load_schema(good_schema)
-    validator.passed_validation()
-    indent_size = validator.get_indent_size()
-
-    assert type(good_schema) == list 
-    assert indent_size >= 0
-
-def test_failed_validation():
+def test_validate_fails():
 
     bad_schema = '''
-    dir1/ 
-        dir2/
-               dir3/
+    dir1/
+    dir2/
+        dir3/
+          dir4/
     '''.split('\n')
 
-    validator = Validator()
-    validator.load_schema(bad_schema)
+    validator = Validator(bad_schema)
+    assert not validator.validate()
 
-    assert type(bad_schema) == list 
-    with pytest.raises(SystemExit):
-        validator.passed_validation()
+def test_find_first_indent():
+
+    schema = '''
+dir1/
+dir2/
+    dir3/
+        dir4/
+    '''.split('\n')
+
+    validator = Validator(schema)
+    indent_data = validator._find_first_indent()
+    assert indent_data['indent_size'] == 4  
+    assert indent_data['index'] == 2

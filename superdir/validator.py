@@ -5,38 +5,30 @@ import utils
 
 class Validator():
 
-    def __init__(self, OUTPUT_DIR=None):
-
-        self.schema = None
-        self.INDENT_SIZE = None
-        self.OUTPUT_DIR = OUTPUT_DIR
-        self.error_data = { 
-            'error': '',
-            'line_number': '', 
-            'data': ''
-        }
-
-    def load_schema(self, schema):
+    def __init__(self, schema, OUTPUT_DIR=None):
         ''' Bind array of cleaned schema file lines to validator object. ''' 
 
         self.schema = utils.clean(schema)
+        self.OUTPUT_DIR = OUTPUT_DIR
+        self.INDENT_SIZE = self._find_first_indent()['indent_size']
+        self.error = {'line_number': None}
 
-    def passed_validation(self):
-        ''' Validate schema and raises ValueError if invalid. '''
+    def validate(self):
+        ''' Return True if schema is valid, otherwise return False. '''
 
-        self.INDENT_SIZE, start_index = self._find_first_indent()
+        start_index = self._find_first_indent()['index']
         prev_indent = self.INDENT_SIZE
         prev_line = self.schema[start_index]
-        lines_to_validate = self.schema[start_index + 1:]
+
         schema_is_valid = True
 
+        lines_to_validate = self.schema[start_index + 1:]
         for index, this_line in enumerate( lines_to_validate ):
 
             this_indent = utils.parse_indent(this_line)
             if not self._line_is_valid(this_line, prev_line, this_indent, prev_indent):
 
-                self.error_data['line_number'] = (index + start_index + 1)
-                self.error_data['schema'] = self.schema[:]
+                self.error['line_number'] = (index + start_index + 1)
                 schema_is_valid = False
                 break
 
@@ -44,8 +36,7 @@ class Validator():
             prev_line = this_line
 
         if not self._top_dir_is_valid(self.OUTPUT_DIR):
-            self.error_data['line_number'] = str(index + start_index + 1)
-            self.error_data['schema'] = '\n'.join(self.schema[:])
+            self.error['line_number'] = str(index + start_index + 1)
             schema_is_valid = False
 
         return schema_is_valid
@@ -83,6 +74,7 @@ class Validator():
         for index, line in enumerate(self.schema):
             if utils.parse_indent(line) > 0:
                 indent_size = utils.parse_indent(line)
+                start_index = index
                 break
 
-        return indent_size, start_index
+        return dict(indent_size=indent_size, index=start_index)
