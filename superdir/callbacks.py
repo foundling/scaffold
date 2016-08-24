@@ -29,8 +29,9 @@ def make_config_processor(config_path=None):
     full_path = os.path.abspath( os.path.join(os.path.expanduser('~'), config_path) )
     try:
 
-        with list(open(full_path)) as config:
-            pass
+        with open(full_path) as config_file:
+            hooks = dict([ map(str.strip, line.split('=')) for line in config_file  if line.strip() ])
+            print hooks
     except IOError as E:
         print('Could not open config file: {}'.format(full_path))
 
@@ -40,9 +41,7 @@ def make_config_processor(config_path=None):
 
         # TODO
         # if node['value'] matches filename, write filepath to node['path']
+        pass
 
 
     return process_config_hooks
-
-
-
