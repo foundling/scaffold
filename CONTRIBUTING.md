@@ -20,7 +20,7 @@ When submitting a patch, please ...
 ## Setting up your development environment and running the tests
 
 - You may want to install [virtualenv](https://virtualenv.pypa.io/en/stable/) to host your test environment.
-- The only requirement for hacking on `superdir` is `py.test`. 
+- The only requirements for hacking on `superdir` are `py.test` and the `click` command-line parsing library. 
 
 ````bash
     # clone the superdir repo
@@ -33,6 +33,6 @@ When submitting a patch, please ...
     pip install --editable .
 
     # run py.tests
-    py.test
+    python -m pytest tests 
 ````
 
