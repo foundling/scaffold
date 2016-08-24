@@ -18,7 +18,7 @@ click
 
 ````bash
 
-Usage: superdir.py [OPTIONS] SCHEMA_FILE
+Usage: superdir [OPTIONS] SCHEMA_FILE
 
 Options:
   -o, --outfile TEXT  Filename of the directory to contain your superdir'd
