@@ -40,8 +40,17 @@ def test_schema_multiple_top_levels():
     
 
 def test_validate_good_schema():
+    ''' This test needs to be more granular, there's a conflict of interest regarding the output dir here '''
 
     validator = Validator(good_schema)
-    status = validator.validate()
-    assert status == True
+    assert validator.validate()
+
+def test_validate_bad_schema():
+    ''' This test needs to be more granular, there's a conflict of interest regarding the output dir here '''
+
+    validator = Validator(bad_schema_1)
+    assert not validator.validate()
+
+    validator = Validator(bad_schema_2)
+    assert not validator.validate()
 
