@@ -11,7 +11,7 @@ pip install superdir
 ## Dependencies
 
 ````bash
-click=6.6
+click
 ````
 
 ## Usage:
