@@ -92,15 +92,16 @@ def test_parse_indent():
     assert utils.parse_indent(indent_b) == 2
     assert utils.parse_indent(indent_c) == 4
 
-def test_get_indent_size():
+def test_get_indent_count():
 
+    # (line to parse, indent size)
     case_a = ('    dir1/', 4)
     case_b = ('        dir1/', 4)
     case_c = ('file1.txt', 4)
 
-    assert utils.get_indent_size(*case_a) == 1
-    assert utils.get_indent_size(*case_b) == 2
-    assert utils.get_indent_size(*case_c) == 0
+    assert utils.get_indent_count(*case_a) == 1
+    assert utils.get_indent_count(*case_b) == 2
+    assert utils.get_indent_count(*case_c) == 0
 
 def test_get_dirname():
 
@@ -122,6 +123,6 @@ def test_get_paths():
     relative_multiple_levels = 'apps/new_app' 
     relative_single_level = 'new_app'
 
-    assert utils.get_paths('/data/apps/new_app') == ('new_app', '/data/apps')
-    assert utils.get_paths('apps/new_app') == ('new_app', os.path.join(abs_cur_dir, 'apps'))
-    assert utils.get_paths('new_app') == ('new_app', abs_cur_dir) 
+    assert utils.get_paths('/data/apps/new_app') == ('/data/apps', 'new_app')
+    assert utils.get_paths('apps/new_app') == (os.path.join(abs_cur_dir, 'apps'), 'new_app')
+    assert utils.get_paths('new_app') == (abs_cur_dir,'new_app') 
