@@ -1,18 +1,8 @@
-make sure to throw if top-level dir doesn't have exactly one dir 
-generalize 'indent' to mean anything the user specifies on command line or in config
-could be '|---' or a regex.
-
-Ensure unicode is handled properly.
-
-Compatibility with python 3
-
-try out coverage.py
-
-pep 8 review
-
-Config hooks for templates: when it finds a file or dir 
-name in your schema, it looks in a template dir for that stock 
-file. need to enable it by passing -c flag.  
-
-
+1. Generalize 'indent' to mean anything the user specifies on command line or in config could be '|---' or a regex.
+2. Ensure unicode is handled properly.
+3. Work on compatibility with python 3
+4. Incorporate coverage.py
+5. Better test coverage of validation and tree functions
+6. Add --version flag
+7. Add validation-only flag
 
