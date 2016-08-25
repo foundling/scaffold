@@ -32,6 +32,7 @@ def make_config_processor(config_path=None):
     except IOError as E:
         print('Could not open config file.')
         print E
+        sys.exit(1)
 
     def process_config_hooks(node):
         ''' on each node, if there's a match in the config settings, that file is created. '''
@@ -40,19 +41,12 @@ def make_config_processor(config_path=None):
         if filename in hooks:
 
             try:
-                with open( hooks[filename], 'r' ) as src_file:
-
-                    try:
-                        with open( node['path'], 'w' ) as dst_file:
-                            dst_file.write( src_file.read() ) 
-
-                    except IOError as E:
-                        print('Could not open destination file.')
-                        print E
+                with open( hooks[filename], 'r' ) as src_file, open( node['path'], 'w' ) as dst_file:
+                    dst_file.write( src_file.read() ) 
 
             except IOError as E:
-                print('Could not open superdir hooks file.')
+                print('Could not write config hook to new file.')
                 print E
-
+                sys.exit(1)
 
     return process_config_hooks
