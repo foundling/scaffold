@@ -47,9 +47,9 @@ class Tree:
         for line in self.data:
 
             cur_indent = utils.get_indent_count(line, self.INDENT_SIZE)
-            filename = utils.get_dirname(line)\
-                       if utils.is_dir(line)\
-                       else utils.get_filename(line)
+            filename = (utils.get_dirname(line)
+                       if utils.is_dir(line)
+                       else utils.get_filename(line))
 
             if cur_indent > prev_indent:
                 parent_node = parent_node['children'][-1]
