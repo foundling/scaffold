@@ -10,10 +10,6 @@ class Tree:
 
     def __init__(self, INDENT_SIZE=None, OUTPUT_DIR=None, base_path=None):
 
-        if os.path.exists(OUTPUT_DIR):
-            print('Error, the directory {} already exists'.format(OUTPUT_DIR)) 
-            sys.exit(1)
-
         self.INDENT_SIZE = INDENT_SIZE
         self.OUTPUT_DIR = OUTPUT_DIR
         self.base_path = base_path
