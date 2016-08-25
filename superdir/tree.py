@@ -35,9 +35,9 @@ class Tree:
             children    = [],
             value       = self.OUTPUT_DIR, 
             # issue here: if no output dir? Then what ?
-            path        = os.path.join(self.base_path, self.OUTPUT_DIR)\
-                          if self.OUTPUT_DIR\
-                          else '' 
+            path        = (os.path.join(self.base_path, self.OUTPUT_DIR)
+                          if self.OUTPUT_DIR
+                          else '')
         )
 
         virtual_root['children'].append(root)
