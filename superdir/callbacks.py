@@ -23,7 +23,11 @@ def make_config_processor(config_path=None):
 
     try:
         with open(full_path) as config_file:
-            hooks = dict([ map(str.strip, line.split('=')) for line in config_file  if line.strip() ])
+            hooks = dict([  
+                            map(str.strip, line.split('=')) 
+                            for line in config_file  
+                            if line.strip() 
+            ])
 
     except IOError as E:
         print('Could not open config file.')
