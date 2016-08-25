@@ -47,16 +47,12 @@ class Tree:
         for line in self.data:
 
             cur_indent = utils.get_indent_count(line, self.INDENT_SIZE)
+            distance = cur_indent - prev_indent
             filename = (utils.get_dirname(line)
                        if utils.is_dir(line)
                        else utils.get_filename(line))
 
-            if cur_indent > prev_indent:
-                parent_node = parent_node['children'][-1]
-
-            elif cur_indent < prev_indent:
-                distance = prev_indent - cur_indent
-                parent_node = self._find_ancestor(parent_node, distance)
+            parent_node = self._find_new_parent(parent_node, distance)
 
             child = self._make_new_node(
                 parent   = parent_node, 
@@ -69,6 +65,18 @@ class Tree:
             prev_indent = cur_indent
 
         self.root = virtual_root
+
+    def _find_new_parent(self, parent_node, distance):
+
+        new_parent = parent_node
+
+        if distance > 0:
+            new_parent = parent_node['children'][-1]
+
+        elif distance < 0:
+            new_parent = self._find_ancestor(parent_node, distance)
+
+        return new_parent
 
     def walk(self, callbacks):
         ''' Walk tree and call callback on each node. '''
