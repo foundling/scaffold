@@ -1,20 +1,36 @@
 # -*- coding: utf-8 -*-
 
 import os
+import sys
 
 import utils
 
 def create_file(node):
     ''' Create a regular file if node has NoneType for children.  Otherwise, creates a directory. '''
 
+    if node['path'] == os.path.abspath(os.curdir):
+        return
+
     if os.path.exists(node['path']):
         print('Error, the directory {} already exists'.format(node['path']))
         sys.exit(1) 
 
     if node['children'] is None:
-        open(node['path'], 'w').close()
+
+        try:
+            open(node['path'], 'w').close()
+
+        except IOError as E:
+            print 'Error: could not create regular file: {}.'.format(node['path'])
+            print E
     else:
-        os.mkdir(node['path'])
+
+        try:
+            os.mkdir(node['path'])
+
+        except IOError as E:
+            print 'Error: could not create directory: {}.'.format(node['path'])
+            print E
 
 def make_config_processor(config_path=None):
     ''' Takes relative name of config file in ~/home directory ''' 

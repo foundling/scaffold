@@ -22,7 +22,7 @@ class Tree:
         virtual_root = self._make_new_node(
             parent      = None,
             children    = [],
-            value       = 'virtual_root',
+            value       = None,
             path        = self.base_path
         )
 
@@ -31,9 +31,9 @@ class Tree:
             children    = [],
             value       = self.OUTPUT_DIR, 
             # issue here: if no output dir? Then what ?
-            path        = (os.path.join(self.base_path, self.OUTPUT_DIR)
-                          if self.OUTPUT_DIR
-                          else '')
+            path        = ( os.path.join(self.base_path, self.OUTPUT_DIR) 
+                            if self.OUTPUT_DIR 
+                            else self.base_path )
         )
 
         virtual_root['children'].append(root)
