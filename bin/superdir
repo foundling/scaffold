@@ -2,4 +2,4 @@
 # -*- coding: utf-8 -*-
 
 from superdir import superdir
-superdir.main()
+superdir.cli()
