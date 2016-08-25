@@ -24,7 +24,7 @@ Options:
   -o, --outfile TEXT  Filename of the directory to contain your superdir'd
                       files
   -c, --config TEXT   Config file to read before superdir'ing your schema
-  --help              Show this message and exit.
+  -h, --help          Show this message and exit.
 
 ````
 
@@ -43,15 +43,15 @@ See here for the [contributors guide](https://github.com/foundling/superdir/blob
 - By default, lines that end with '`/`' are treated as directories. Everything else is treated as a file. 
 - Comments should be prefixed by '`#`'.
 - Comments and blank lines are ignored.
-- If no `OUTPUT_DIR` option is given, the schema must contain exactly one top-level directory.
+- If no `OUTPUT_DIR` option is given, the schema must contain exactly one top-level directory with no sibling files.
 - If an `OUTPUT_DIR` option is given, the schema file may contain one or more top-level directories and or files.
 
 ## Hooks:
 
-Hooks will let you write the content of a template file to all matching filenames in your schema file. To take advantage of hooks, create a `.superdirrc` file in your home directory. Add an equals-separated key-value pair for each template file you want, where the key is the filename and the value is the template file's location on your system. Here's an example:
+Hooks will let you copy a pre-existing file's content into a file created from your schema. To take advantage of hooks, pass the `-c` or `--config` flag with a filepath relative to your $HOME directory. In the config file, add an equal-delimited list of key-value pairs, where the key is the filename and the value is the filepath for the file you want to copy. Here's an example:
 
 ````bash
-# config file in $HOME/.superdirrc 
+# config file in $HOME/.superdir_hooks 
 
 # pattern to match from schema -> template location 
 index.html = ~/apps/lib/html/index.html
@@ -64,11 +64,12 @@ In the process of building the tree, if `superdir` comes across a matching file 
 ## superdir in action!
 
 ````bash
-$ cat schema.txt
 
-# Flat-file example of a directory structure
+# this a valid schema file
+$ cat schema.txt
 superdir/
     docs/
+    # comments and blank lines are ignored
     superdir/
         superdir.py
         validator.py
@@ -81,8 +82,8 @@ superdir/
     LICENSE.md
     test/
 
-$ superdir schema.txt new_project 
-$ tree
+# creating a directory tree from the schema file
+$ superdir schema.txt -o new_project && tree new_project 
 new_project
 └── superdir/
     └── docs/
@@ -96,8 +97,9 @@ new_project
         └── tree_test.py
     └── README.md
     └── LICENSE.md
-$ cat schema.txt | superdir another_new_project
-$ tree another_new_project
+
+# Piping schema.txt into superdir 
+$ cat schema.txt | superdir -o another_new_project && tree another_new_project
 another_new_project
 └── superdir/
     └── docs/
