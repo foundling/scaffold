@@ -33,6 +33,6 @@ When submitting a patch, please ...
     pip install --editable .
 
     # run py.tests
-    python -m pytest tests 
+    python -m pytest tests/ 
 ````
 

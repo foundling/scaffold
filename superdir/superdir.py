@@ -12,6 +12,8 @@ from validator import Validator
 import callbacks as cbs
 import utils
 
+__version_info__ = ('0', '1', '5')
+__version__ = '.'.join(__version_info__)
 
 def main(schema=None, OUTPUT_DIR=None, CONFIG_PATH=None):
     ''' Validate schema file and output directory parameters, build a tree from schema, callback on each node.  '''
@@ -39,8 +41,15 @@ def main(schema=None, OUTPUT_DIR=None, CONFIG_PATH=None):
 
     directory_tree.walk(callbacks=callbacks)
 
+def print_version(ctx, param, value):
+    if not value or ctx.resilient_parsing:
+        return
+    click.echo(__version__)
+    ctx.exit()
 
 @click.command(context_settings=dict(help_option_names=['-h', '--help']))
+@click.option('-v', '--version', is_flag=True, callback=print_version,
+              expose_value=False, is_eager=True)
 @click.argument('schema_file', type=click.File('r'), required=True, default=sys.stdin)
 @click.option('-c', '--config', nargs=1, type=str, help="Path to config file to read before superdir'ing your schema.")
 @click.option('-o', '--outfile', nargs=1, type=str, help=("Directory name to contain your superdir'd files. If none is" 
@@ -62,6 +71,7 @@ def cli(schema_file, outfile, config):
 
         # schema from a file
         schema = list(schema_file)
+
 
     main(schema=schema, OUTPUT_DIR=outfile, CONFIG_PATH=config)
 
