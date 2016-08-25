@@ -9,7 +9,6 @@ import click
 
 from tree import Tree
 from validator import Validator
-from cli import cli
 import callbacks as cbs
 import utils
 
