@@ -3,6 +3,3 @@
 3. Work on compatibility with python 3
 4. Incorporate coverage.py
 5. Better test coverage of validation and tree functions
-6. Add --version flag
-7. Add validation-only flag
-
