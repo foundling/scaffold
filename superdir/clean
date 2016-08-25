@@ -2,4 +2,5 @@
 
 rm -rf ./*.pyc
 rm -rf ./SUPERDIR_OUTPUT*
+rm -rf ./TEST_DIR*
 rm -rf output_dir
