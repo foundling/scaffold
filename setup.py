@@ -4,13 +4,21 @@ import os
 from setuptools import setup
 
 def read(fname):
+
+    try:
         return open(os.path.join(os.path.dirname(__file__), fname)).read()
+
+    except IOError as E:
+        print('Could not open {}'.format(fname))
+        print(E)
+
+SUPERDIR_VERSION = read('VERSION').strip()
 
 setup(
     name = "superdir",
     author = 'Alex Ramsdell',
     author_email = 'alexramsdell@gmail.com',
-    version = "0.1.3",
+    version = SUPERDIR_VERSION,
     url = 'http://github.com/foundling/superdir',
     license = 'MIT',
     description = 'Turn that text file into a file tree!',
