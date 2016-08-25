@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+import sys
 from setuptools import setup
 
 def read(fname):
@@ -12,13 +13,12 @@ def read(fname):
         print('Could not open {}'.format(fname))
         print(E)
 
-SUPERDIR_VERSION = read('VERSION').strip()
 
 setup(
     name = "superdir",
     author = 'Alex Ramsdell',
     author_email = 'alexramsdell@gmail.com',
-    version = SUPERDIR_VERSION,
+    version = '0.1.5',
     url = 'http://github.com/foundling/superdir',
     license = 'MIT',
     description = 'Turn that text file into a file tree!',
