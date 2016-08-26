@@ -30,7 +30,6 @@ class Tree:
             parent      = virtual_root,
             children    = [],
             value       = self.OUTPUT_DIR, 
-            # issue here: if no output dir? Then what ?
             path        = ( os.path.join(self.base_path, self.OUTPUT_DIR) 
                             if self.OUTPUT_DIR 
                             else self.base_path )
@@ -40,15 +39,22 @@ class Tree:
 
         parent_node = virtual_root
         prev_indent = -1
+
+        # the question in this loop: where to put this new line?
+        # which is really: who is the parent of new line
+
+        # if it's indented by 1, put it in parent's last child
+        # if no change, append to parent's children. 
+
         for line in self.data:
 
             cur_indent = utils.get_indent_count(line, self.INDENT_SIZE)
             distance = cur_indent - prev_indent
-            filename = (utils.get_dirname(line)
-                       if utils.is_dir(line)
-                       else utils.get_filename(line))
-
+            # who is the parent?
             parent_node = self._find_new_parent(parent_node, distance)
+            filename = (utils.get_dirname(line)
+                        if utils.is_dir(line)
+                        else utils.get_filename(line))
 
             child = self._make_new_node(
                 parent   = parent_node, 
@@ -70,7 +76,7 @@ class Tree:
             new_parent = parent_node['children'][-1]
 
         elif distance < 0:
-            new_parent = self._find_ancestor(parent_node, distance)
+            new_parent = self._find_ancestor(parent_node, abs(distance))
 
         return new_parent
 
