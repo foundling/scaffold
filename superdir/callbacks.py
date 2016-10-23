@@ -3,13 +3,22 @@
 import os
 import sys
 
+import pprint
 import utils
+
+pp = pprint.PrettyPrinter(indent=1)
+
+def pprint_node(node):
+    pp.pprint(node)
 
 def create_file(node):
     """ 
 
-    Create a regular file if node has NoneType for children.  
-    Otherwise, creates a directory. 
+    Create a regular file if node has NoneType for children,  
+    otherwise, creates a directory. 
+
+    
+
 
     """
 

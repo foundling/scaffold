@@ -9,7 +9,7 @@ import click
 
 from tree import Tree
 from validator import Validator
-from callbacks import make_config_processor, create_file
+from callbacks import make_config_processor, pprint_node, create_file
 import utils
 from messages import cli_messages as superdir_help 
 
@@ -38,7 +38,7 @@ def main(schema=None, OUTPUT_DIR=None, CONFIG_PATH=None):
     directory_tree.load_data(schema)
     directory_tree.build_tree()
 
-    callbacks = [ create_file ]
+    callbacks = [ pprint_node ]
 
     if CONFIG_PATH:
         process_hooks = make_config_processor(CONFIG_PATH)

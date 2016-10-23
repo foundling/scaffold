@@ -1,10 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import print_function
 import os
-import sys
 import utils
-import pdb
 
 class Tree:
 
@@ -14,12 +11,7 @@ class Tree:
         self.OUTPUT_DIR = OUTPUT_DIR
         self.base_path = base_path
         self.input = None
-        self.root = None
-
-    def build_tree(self):
-        ''' Build tree from indentation. '''
-
-        virtual_root = self._make_new_node(
+        self.virtual_root = dict(
             parent = None,
             children = [],
             data = { 
@@ -27,9 +19,8 @@ class Tree:
                 'basedir': self.base_path 
             },
         )
-
-        root = self._make_new_node(
-            parent = virtual_root,
+        self.root = dict(
+            parent = self.virtual_root,
             children = [],
             data = { 
                 'filename': self.OUTPUT_DIR, 
@@ -40,17 +31,24 @@ class Tree:
                 )
             },
         )
+        self.virtual_root.append(self.root);
 
-        virtual_root['children'].append(root)
+    def build_tree(self):
 
-        parent_node = virtual_root
+        """
+
+        Build tree using indentation level.
+
+        Indentation indicates a change in hierarchy level.
+        current line ending in '/' or not indicates regular file or not.
+
+        The question in this loop: where to put this new line?, 
+        which is asking "who is the parent of new line?"
+
+        """ 
+
+        parent_node = self.virtual_root
         prev_indent = -1
-
-        # the question in this loop: where to put this new line?
-        # which is really: who is the parent of new line
-
-        # if it's indented by 1, put it in parent's last child
-        # if no change, append to parent's children. 
 
         for line in self.input:
 
@@ -62,7 +60,7 @@ class Tree:
                         if utils.is_dir(line)
                         else utils.get_filename(line))
 
-            child = self._make_new_node(
+            child = dict(
                 parent = parent_node, 
                 children = [] if utils.is_dir(line) else None,
                 data = { 
@@ -73,8 +71,6 @@ class Tree:
 
             parent_node['children'].append(child)
             prev_indent = cur_indent
-
-        self.root = virtual_root
 
     def _find_new_parent(self, parent_node, distance):
 
@@ -104,27 +100,13 @@ class Tree:
                 if child['children'] is not None:
                     _walk(child)
 
-        tree = self.root
+        tree = self.virtual_root
         _walk(tree)
 
     def load_data(self, data):
         ''' Load and clean up input data '''
 
         self.input = utils.clean(data)
-
-    def _make_new_node(self, parent=None, children=None, data=None):
-
-        """ 
-
-        Create a new node. If children is NoneType, node is treated as a leaf/regular file. 
-
-        """
-
-        return dict(
-            parent=parent, 
-            children=children, 
-            data=data, 
-        )
 
     def _find_ancestor(self, start_node, parents_to_visit):
         ''' Return parent directory corresponding to node parsed from current line. '''
