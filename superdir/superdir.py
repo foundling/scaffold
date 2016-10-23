@@ -12,7 +12,7 @@ from validator import Validator
 import callbacks as cbs
 import utils
 
-__version_info__ = ('0', '1', '5')
+__version_info__ = ('0', '1', '7')
 __version__ = '.'.join(__version_info__)
 
 def main(schema=None, OUTPUT_DIR=None, CONFIG_PATH=None):
