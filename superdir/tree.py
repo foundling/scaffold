@@ -13,26 +13,32 @@ class Tree:
         self.INDENT_SIZE = INDENT_SIZE
         self.OUTPUT_DIR = OUTPUT_DIR
         self.base_path = base_path
-        self.data = None
+        self.input = None
         self.root = None
 
     def build_tree(self):
         ''' Build tree from indentation. '''
 
         virtual_root = self._make_new_node(
-            parent      = None,
-            children    = [],
-            value       = None,
-            path        = self.base_path
+            parent = None,
+            children = [],
+            data = { 
+                'filename': None, 
+                'basedir': self.base_path 
+            },
         )
 
         root = self._make_new_node(
-            parent      = virtual_root,
-            children    = [],
-            value       = self.OUTPUT_DIR, 
-            path        = ( os.path.join(self.base_path, self.OUTPUT_DIR) 
-                            if self.OUTPUT_DIR 
-                            else self.base_path )
+            parent = virtual_root,
+            children = [],
+            data = { 
+                'filename': self.OUTPUT_DIR, 
+                'basedir': ( 
+                    os.path.join(self.base_path, self.OUTPUT_DIR) 
+                    if self.OUTPUT_DIR 
+                    else self.base_path 
+                )
+            },
         )
 
         virtual_root['children'].append(root)
@@ -46,7 +52,7 @@ class Tree:
         # if it's indented by 1, put it in parent's last child
         # if no change, append to parent's children. 
 
-        for line in self.data:
+        for line in self.input:
 
             cur_indent = utils.get_indent_count(line, self.INDENT_SIZE)
             distance = cur_indent - prev_indent
@@ -57,10 +63,12 @@ class Tree:
                         else utils.get_filename(line))
 
             child = self._make_new_node(
-                parent   = parent_node, 
+                parent = parent_node, 
                 children = [] if utils.is_dir(line) else None,
-                value    = filename,
-                path     = os.path.join(parent_node['path'], filename)
+                data = { 
+                    'filename': filename, 
+                    'basedir': os.path.join(parent_node['data']['basedir'], filename) 
+                },  
             ) 
 
             parent_node['children'].append(child)
@@ -102,13 +110,21 @@ class Tree:
     def load_data(self, data):
         ''' Load and clean up input data '''
 
-        self.data = utils.clean(data)
+        self.input = utils.clean(data)
 
-    def _make_new_node(self, parent=None, children=None, value=None, path=''):
-        ''' Create a new node. If children is NoneType, node is treated as a 
-        leaf. 
-        '''
-        return  dict(parent=parent, children=children, value=value, path=path)
+    def _make_new_node(self, parent=None, children=None, data=None):
+
+        """ 
+
+        Create a new node. If children is NoneType, node is treated as a leaf/regular file. 
+
+        """
+
+        return dict(
+            parent=parent, 
+            children=children, 
+            data=data, 
+        )
 
     def _find_ancestor(self, start_node, parents_to_visit):
         ''' Return parent directory corresponding to node parsed from current line. '''

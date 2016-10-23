@@ -73,7 +73,12 @@ def get_filename(line):
     return line.strip()
 
 def get_paths(output_dir):
-    ''' Turn /path/to/output_dir into /path/to, output_dir. '''
+    """
+    
+    Turns /path/to/output_dir into /path/to, output_dir. 
+
+    """
+
 
     abs_cur_dir = os.path.abspath(os.curdir)
     full_base_path = None

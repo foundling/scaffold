@@ -6,30 +6,41 @@ import sys
 import utils
 
 def create_file(node):
-    ''' Create a regular file if node has NoneType for children.  Otherwise, creates a directory. '''
+    """ 
 
-    if node['path'] == os.path.abspath(os.curdir):
-        return
+    Create a regular file if node has NoneType for children.  
+    Otherwise, creates a directory. 
 
-    if os.path.exists(node['path']):
-        print('Error, the directory {} already exists'.format(node['path']))
+    """
+
+    if node['data']['filename'] == os.path.abspath(os.curdir):
+
+        print('Error: you have specified the current directory as your' 
+               'output directory. Create a new directory. See superdir --help'
+               'for usage');
+
+        sys.exit(1) 
+
+    if os.path.exists(node['data']['basedir']):
+
+        print('Error, the directory {} already exists'.format(node['data']['basedir']))
         sys.exit(1) 
 
     if node['children'] is None:
 
         try:
-            open(node['path'], 'w').close()
+            open(node['data']['basedir'], 'w').close()
 
         except IOError as E:
-            print 'Error: could not create regular file: {}.'.format(node['path'])
+            print 'Error: could not create regular file: {}.'.format(node['data']['basedir'])
             print E
     else:
 
         try:
-            os.mkdir(node['path'])
+            os.mkdir(node['data']['basedir'])
 
         except IOError as E:
-            print 'Error: could not create directory: {}.'.format(node['path'])
+            print 'Error: could not create directory: {}.'.format(node['data']['basedir'])
             print E
 
 def make_config_processor(config_path=None):
@@ -53,11 +64,11 @@ def make_config_processor(config_path=None):
     def process_config_hooks(node):
         ''' on each node, if there's a match in the config settings, that file is created. '''
 
-        filename = node['value'] 
+        filename = node['data']['filename']
         if filename in hooks:
 
             try:
-                with open( hooks[filename], 'r' ) as src_file, open( node['path'], 'w' ) as dst_file:
+                with open( hooks[filename], 'r' ) as src_file, open( node['data']['basedir'], 'w' ) as dst_file:
                     dst_file.write( src_file.read() ) 
 
             except IOError as E:

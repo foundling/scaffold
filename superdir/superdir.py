@@ -58,7 +58,7 @@ def print_version(ctx, param, value):
 @click.argument('schema_file', type=click.File('r'), required=True, default=sys.stdin)
 @click.option('-c', '--config', nargs=1, type=str, help=superdir_help['config'])
 @click.option('-o', '--outdir', nargs=1, type=str, help=superdir_help['outdir'])
-def cli(schema_file, outfile, config):
+def cli(schema_file, outdir, config):
 
     schema = None
 
@@ -74,7 +74,7 @@ def cli(schema_file, outfile, config):
         schema = list(schema_file)
 
 
-    main(schema=schema, OUTPUT_DIR=outfile, CONFIG_PATH=config)
+    main(schema=schema, OUTPUT_DIR=outdir, CONFIG_PATH=config)
 
 if __name__ == '__main__':
 
