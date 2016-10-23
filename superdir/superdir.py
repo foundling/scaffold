@@ -9,14 +9,21 @@ import click
 
 from tree import Tree
 from validator import Validator
-import callbacks as cbs
+from callbacks import make_config_processor, create_file
 import utils
+from messages import cli_messages as superdir_help 
 
 __version_info__ = ('0', '1', '7')
 __version__ = '.'.join(__version_info__)
 
 def main(schema=None, OUTPUT_DIR=None, CONFIG_PATH=None):
-    ''' Validate schema file and output directory parameters, build a tree from schema, callback on each node.  '''
+    """
+
+    - Validate the schema file and output directory parameters
+    - Build a tree from the schema file
+    - Walk the tree, calling the registered callbacks on each node. 
+
+    """
 
     validator = Validator(schema, OUTPUT_DIR=OUTPUT_DIR)
     if not validator.validate():
@@ -31,12 +38,10 @@ def main(schema=None, OUTPUT_DIR=None, CONFIG_PATH=None):
     directory_tree.load_data(schema)
     directory_tree.build_tree()
 
-    callbacks = [
-        cbs.create_file,
-    ]
+    callbacks = [ create_file ]
 
     if CONFIG_PATH:
-        process_hooks = cbs.make_config_processor(CONFIG_PATH)
+        process_hooks = make_config_processor(CONFIG_PATH)
         callbacks.append(process_hooks)
 
     directory_tree.walk(callbacks=callbacks)
@@ -51,12 +56,8 @@ def print_version(ctx, param, value):
 @click.option('-v', '--version', is_flag=True, callback=print_version,
               expose_value=False, is_eager=True)
 @click.argument('schema_file', type=click.File('r'), required=True, default=sys.stdin)
-@click.option('-c', '--config', nargs=1, type=str, help="Path to config file to read before superdir'ing your schema.")
-@click.option('-o', '--outfile', nargs=1, type=str, help=("Directory name to contain your superdir'd files. If none is" 
-                                                          "supplied, your schema file must have exactly one top-level directory"         
-                                                          "and no sibling regular files. That top-level directory will be the"
-                                                          "parent of your new file tree. If an output directory is supplied"
-                                                          "then any validly-indented schema file is allowed."))
+@click.option('-c', '--config', nargs=1, type=str, help=superdir_help['config'])
+@click.option('-o', '--outdir', nargs=1, type=str, help=superdir_help['outdir'])
 def cli(schema_file, outfile, config):
 
     schema = None
