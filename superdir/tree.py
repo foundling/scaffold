@@ -5,11 +5,11 @@ import utils
 
 class Tree:
 
-    def __init__(self, INDENT_SIZE=None, OUTPUT_DIR=None, base_path=None):
+    def __init__(self, output_dir=None, base_path=None, indent_size=None):
 
-        self.INDENT_SIZE = INDENT_SIZE
-        self.OUTPUT_DIR = OUTPUT_DIR
+        self.output_dir = output_dir
         self.base_path = base_path
+        self.indent_size = indent_size
         self.input = None
         self.virtual_root = dict(
             parent = None,
@@ -23,10 +23,10 @@ class Tree:
             parent = self.virtual_root,
             children = [],
             data = { 
-                'filename': self.OUTPUT_DIR, 
+                'filename': self.output_dir, 
                 'basedir': ( 
-                    os.path.join(self.base_path, self.OUTPUT_DIR) 
-                    if self.OUTPUT_DIR 
+                    os.path.join(self.base_path, self.output_dir) 
+                    if self.output_dir 
                     else self.base_path 
                 )
             },
@@ -52,7 +52,7 @@ class Tree:
 
         for line in self.input:
 
-            cur_indent = utils.get_indent_count(line, self.INDENT_SIZE)
+            cur_indent = utils.get_indent_count(line, self.indent_size)
             distance = cur_indent - prev_indent
             # who is the parent?
             parent_node = self._find_new_parent(parent_node, distance)
@@ -104,11 +104,13 @@ class Tree:
         _walk(tree)
 
     def load_data(self, data):
+
         ''' Load and clean up input data '''
 
         self.input = utils.clean(data)
 
     def _find_ancestor(self, start_node, parents_to_visit):
+
         ''' Return parent directory corresponding to node parsed from current line. '''
 
         current_node = start_node
