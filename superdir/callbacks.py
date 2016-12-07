@@ -41,16 +41,16 @@ def create_file(node):
             open(node['data']['basedir'], 'w').close()
 
         except IOError as E:
-            print 'Error: could not create regular file: {}.'.format(node['data']['basedir'])
-            print E
+            print('Error: could not create regular file: {}.'.format(node['data']['basedir']))
+            print(E)
     else:
 
         try:
             os.mkdir(node['data']['basedir'])
 
         except IOError as E:
-            print 'Error: could not create directory: {}.'.format(node['data']['basedir'])
-            print E
+            print('Error: could not create directory: {}.'.format(node['data']['basedir']))
+            print(E)
 
 def make_config_processor(config_path=None):
     ''' Takes relative name of config file in ~/home directory ''' 
@@ -67,7 +67,7 @@ def make_config_processor(config_path=None):
 
     except IOError as E:
         print('Could not open config file.')
-        print E
+        print(E)
         sys.exit(1)
 
     def process_config_hooks(node):
@@ -82,7 +82,7 @@ def make_config_processor(config_path=None):
 
             except IOError as E:
                 print('Could not write config hook to new file.')
-                print E
+                print(E)
                 sys.exit(1)
 
     return process_config_hooks
