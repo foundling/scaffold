@@ -31,7 +31,7 @@ class Tree:
                 )
             },
         )
-        self.virtual_root.append(self.root);
+        self.virtual_root['children'].append(self.root);
 
     def build_tree(self):
 
