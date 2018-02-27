@@ -17,9 +17,9 @@ schema_mult_top_levels = list(open(full_path('schema_mult_top_levels.txt')))
 def test_find_first_indent():
 
     validator = Validator(good_schema)
-    indent_data = validator._find_first_indent()
-    assert indent_data['indent_size'] == 4  
-    assert indent_data['index'] == 1
+    indent_size, start_index = validator._find_first_indent()
+    assert indent_size == 4  
+    assert start_index == 1
 
 def test_schema_single_top_level():
 

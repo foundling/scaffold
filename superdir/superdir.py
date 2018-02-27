@@ -1,6 +1,5 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-
 
 import os
 import sys
@@ -27,7 +26,9 @@ def main(schema=None, output_dir=None, config_path=None):
     """
 
     validator = Validator(schema, output_dir=output_dir)
-    if not validator.validate():
+    validator.validate()
+
+    if not validator.is_valid():
         click.echo(validator.error['msg'])
         sys.exit(1)
 
@@ -39,7 +40,7 @@ def main(schema=None, output_dir=None, config_path=None):
     directory_tree.load_data(schema)
     directory_tree.build_tree()
 
-    callbacks = [ pprint_node ]
+    callbacks = [ create_file ]
 
     if config_path:
         process_hooks = make_config_processor(config_path)
@@ -80,20 +81,25 @@ def print_version(ctx, param, value):
               type=str, 
               help=superdir_help['outdir'])
 
-def cli(schema_file, outdir, config):
+@click.option('-i', 
+              '--indent-string', 
+              nargs=1, 
+              type=str, 
+              help=superdir_help['indent_string'])
 
+def cli(schema_file, config, outdir, indent_string):
+
+    # schema probably coming from a pipe
     if schema_file is None:
 
-        # schema probably coming from a pipe
         if not sys.stdin.isatty():
             schema = list(sys.stdin) 
 
+    # schema from a file
     else:
-
-        # schema from a file
         schema = list(schema_file)
 
-    main(schema=schema, output_dir=outdir, config_path=config)
+    main(schema=schema, output_dir=outdir, config_path=config, indent_string=indent_string)
 
 if __name__ == '__main__':
     cli()

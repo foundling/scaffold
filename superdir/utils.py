@@ -44,31 +44,31 @@ def clean(lines):
             for line in lines 
             if not ( is_empty(line) or is_comment(line) ) ]
 
-def parse_indent(line):
+def parse_indent(line, indent_string=None):
 
-    ''' Return the leading number of spaces in a line of text. '''
+    ''' 
+        Return the left indent size. Right side of each line has been 
+        stripped already with .rstrip().
+    '''
 
-    return len(line) - len(line.lstrip())
+    return len(line) - len(line.lstrip(indent_string))
 
-def get_indent_count(line, indent_size):
+def get_indent_count(line, indent_size, indent_string=None):
 
     ''' 
         Return the number of indentation units after dividing a line of 
         text's leading space count by some indent_size. 
     '''
 
-    raw_indent = len(line) - len(line.lstrip())
-
-    rv = None 
+    raw_indent = parse_indent(line, indent_string)
 
     try:
-        rv = raw_indent / indent_size
+        indent_count = raw_indent / indent_size
 
     except ZeroDivisionError:
+        indent_count = 0
 
-        rv = 0
-
-    return rv
+    return indent_count
             
 def get_dirname(line):
 

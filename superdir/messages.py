@@ -7,9 +7,8 @@ cli_messages = {
                "supplied, your schema file must have exactly one top-level directory "
                "and no sibling regular files. That top-level directory will be the "
                "parent of your new file tree. If an output directory is supplied " 
-               "then any validly-indented schema file is allowed.")
-}
+               "then any validly-indented schema file is allowed."),
 
-error_messages = {
-}
+    "indent_string": "String representing a relative heirarchy in the schema file."
 
+}
