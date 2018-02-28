@@ -30,10 +30,28 @@ def is_multiple_of_indent(this_indent, global_indent):
         indent size is repeatedly subtracted from it. Otherwise returns False. 
     '''
 
+    # can't you just mod global indent by this_indent and check if res = 0?
     while this_indent > 0:
         this_indent -= global_indent
 
     return this_indent == 0
+
+def is_sibling(delta): 
+    ''' no change in indentation since last line read '''
+    return delta == 0
+
+def is_child(delta, indent_size, prev_line): 
+    ''' 
+        Positive change in indentation by exactly indent size, and previous 
+        line read was a directory.
+    '''
+    return delta == indent_size and is_dir(prev_line)
+
+def is_parent(delta, indent_size, cur_indent):
+    '''
+        Dedentation that's a multiple of indent size 
+    '''
+    return delta < 0 and is_multiple_of_indent(cur_indent, indent_size) 
 
 def clean(lines):
 
@@ -70,20 +88,20 @@ def get_indent_count(line, indent_size, indent_string=None):
 
     return indent_count
             
-def get_dirname(line):
+def get_dirname(line, indent_string=None):
 
     ''' 
         Remove all trailing forward slashes from a line after it's been 
         stripped. 
     '''
 
-    return line.strip().rstrip('/')
+    return line.lstrip(indent_string).strip().rstrip('/')
 
-def get_filename(line):
+def get_filename(line, indent_string=None):
 
     ''' Return line with whitespace stripped. '''
 
-    return line.strip()
+    return line.lstrip(indent_string).strip()
 
 def get_paths(output_dir):
 

@@ -1,6 +1,4 @@
 import os
-from StringIO import StringIO
-
 import pytest
 
 from superdir.validator import Validator

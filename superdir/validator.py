@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# -* coding: utf-8 -*-
 
 import sys
 from utils import clean, parse_indent, is_dir, is_sibling, is_parent, is_child, get_indent_count

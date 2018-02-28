@@ -15,7 +15,7 @@ from validator import Validator
 __version_info__ = ('0', '1', '7')
 __version__ = '.'.join(__version_info__)
 
-def main(schema=None, output_dir=None, config_path=None):
+def main(schema=None, output_dir=None, config_path=None, indent_string=None):
 
     """
 
@@ -25,28 +25,32 @@ def main(schema=None, output_dir=None, config_path=None):
 
     """
 
-    validator = Validator(schema, output_dir=output_dir)
+    validator = Validator(schema, output_dir=output_dir, indent_string=indent_string)
     validator.validate()
 
-    if not validator.is_valid():
-        click.echo(validator.error['msg'])
+
+    if not validator.is_valid:
+        click.echo(validator.error)
         sys.exit(1)
 
     directory_tree = Tree(
         indent_size = validator.indent_size,
+        indent_string = indent_string,
         output_dir  = output_dir,
         base_path   = os.path.abspath(os.curdir)
     )
     directory_tree.load_data(schema)
+
     directory_tree.build_tree()
 
-    callbacks = [ create_file ]
+    callbacks = [ pprint_node ]
 
     if config_path:
         process_hooks = make_config_processor(config_path)
         callbacks.append(process_hooks)
 
     directory_tree.walk(callbacks=callbacks)
+    return
 
 def print_version(ctx, param, value):
 

@@ -1,15 +1,17 @@
 # -*- coding: utf-8 -*-
 
 import os
-import utils
+from utils import get_indent_count, get_dirname, get_filename, is_dir, clean
+
 
 class Tree:
 
-    def __init__(self, output_dir=None, base_path=None, indent_size=None):
+    def __init__(self, output_dir=None, base_path=None, indent_size=None, indent_string=None):
 
-        self.output_dir = output_dir
         self.base_path = base_path
+        self.output_dir = output_dir
         self.indent_size = indent_size
+        self.indent_string = indent_string
         self.input = None
         self.virtual_root = dict(
             parent = None,
@@ -31,7 +33,7 @@ class Tree:
                 )
             },
         )
-        self.virtual_root.append(self.root);
+        self.virtual_root['children'].append(self.root);
 
     def build_tree(self):
 
@@ -49,20 +51,20 @@ class Tree:
 
         parent_node = self.virtual_root
         prev_indent = -1
-
+    
         for line in self.input:
 
-            cur_indent = utils.get_indent_count(line, self.indent_size)
+            cur_indent = get_indent_count(line, self.indent_size, indent_string=self.indent_string)
             distance = cur_indent - prev_indent
             # who is the parent?
             parent_node = self._find_new_parent(parent_node, distance)
-            filename = (utils.get_dirname(line)
-                        if utils.is_dir(line)
-                        else utils.get_filename(line))
+            filename = (get_dirname(line, indent_string=self.indent_string)
+                        if is_dir(line)
+                        else get_filename(line, indent_string=self.indent_string))
 
             child = dict(
                 parent = parent_node, 
-                children = [] if utils.is_dir(line) else None,
+                children = [] if is_dir(line) else None,
                 data = { 
                     'filename': filename, 
                     'basedir': os.path.join(parent_node['data']['basedir'], filename) 
@@ -107,7 +109,7 @@ class Tree:
 
         ''' Load and clean up input data '''
 
-        self.input = utils.clean(data)
+        self.input = clean(data)
 
     def _find_ancestor(self, start_node, parents_to_visit):
 
